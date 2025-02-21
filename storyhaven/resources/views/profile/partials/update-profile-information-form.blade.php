@@ -17,11 +17,44 @@
         @csrf
         @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Nombre')" />
-            <x-text-input id="name" name="name" type="text" class="block w-full mt-1" :value="old('name', $user->name)"
-                required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        <div class="flex space-x-4">
+            <div class="flex-1">
+                <x-input-label for="name" :value="__('Nombre')" />
+                <x-text-input id="name" name="name" type="text" class="block w-full mt-1" :value="old('name', $user->name)"
+                    required autofocus autocomplete="name" />
+                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            </div>
+
+            <div class="flex-1">
+                <x-input-label for="surname" :value="__('Apellidos')" />
+                <x-text-input id="surname" name="surname" type="text" class="block w-full mt-1" :value="old('surname', $user->surname)"
+                    required autocomplete="surname" />
+                <x-input-error class="mt-2" :messages="$errors->get('surname')" />
+            </div>
+        </div>
+
+        <!-- Fecha de Nacimiento y País -->
+        <div class="flex mt-4 space-x-4">
+            <div class="w-1/2">
+                <x-input-label for="date_birth" :value="__('Fecha de Nacimiento')" />
+                <x-text-input id="date_birth" class="block w-full mt-1" type="date" name="date_birth"
+                    :value="old('date_birth')" required />
+                <x-input-error :messages="$errors->get('date_birth')" class="mt-2" />
+            </div>
+
+            <div class="w-1/2">
+                <x-input-label for="country" :value="__('País')" />
+                <select id="country" name="country" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
+                    :value="old('country')" required>
+                    <option value="" disabled selected>{{ __('Seleccionar país') }}</option>
+                    <option value="España">{{ __('España') }}</option>
+                    <option value="Italia">{{ __('Italia') }}</option>
+                    <option value="Portugal">{{ __('Portugal') }}</option>
+                    <option value="Inglaterra">{{ __('Inglaterra') }}</option>
+                    <option value="Francia">{{ __('Francia') }}</option>
+                </select>
+                <x-input-error :messages="$errors->get('country')" class="mt-2" />
+            </div>
         </div>
 
         <div>
