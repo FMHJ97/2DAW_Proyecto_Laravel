@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Genero;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +17,42 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        /*
+        Insertamos un usuario administrador.
+        */
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Francisco Manuel',
+            'surname' => 'Hernández',
+            'date_birth' => '1997-01-05',
+            'country' => 'España',
+            'username' => 'fmhj97',
+            'email' => 'fmhj97@gmail.com',
+            'role' => 'admin',
+            'password' => Hash::make('123456789'),
+        ]);
+
+        /*
+        Insertamos los géneros de los relatos.
+        */
+        Genero::factory()->create([
+            ['nombre' => 'Acción'],
+            ['nombre' => 'Aventura'],
+            ['nombre' => 'Ciencia ficción'],
+            ['nombre' => 'Fantasía'],
+            ['nombre' => 'Misterio'],
+            ['nombre' => 'Romance'],
+            ['nombre' => 'Terror'],
+            ['nombre' => 'Thriller'],
+            ['nombre' => 'Drama'],
+            ['nombre' => 'Comedia'],
+            ['nombre' => 'Crimen'],
+            ['nombre' => 'Suspense'],
+            ['nombre' => 'No ficción'],
+            ['nombre' => 'Histórico'],
+            ['nombre' => 'Paranormal'],
+            ['nombre' => 'Psicológico'],
+            ['nombre' => 'Distopía'],
+            ['nombre' => 'Post-apocalíptico'],
         ]);
     }
 }
