@@ -12,8 +12,13 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Inicio') }}
+                    {{-- Enlace a la vista de relatos del usuario autenticado --}}
+                    <x-nav-link :href="route('relatos.index')" :active="request()->routeIs('relatos.index')">
+                        {{ __('Mis relatos') }}
+                    </x-nav-link>
+                    {{-- Enlace a la vista de creación de relatos --}}
+                    <x-nav-link :href="route('relatos.create')" :active="request()->routeIs('relatos.create')">
+                        {{ __('Nuevo relato') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -75,8 +80,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Inicio') }}
+            <x-responsive-nav-link :href="route('relatos.index')" :active="request()->routeIs('relatos.index')">
+                {{ __('Mis relatos') }}
             </x-responsive-nav-link>
         </div>
 

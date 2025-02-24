@@ -50,4 +50,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /*
+    Relación uno a muchos con la tabla relatos.
+    */
+    public function relatos()
+    {
+        return $this->hasMany(Relato::class);
+    }
 }

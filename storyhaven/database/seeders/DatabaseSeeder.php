@@ -25,16 +25,18 @@ class DatabaseSeeder extends Seeder
             'surname' => 'Hernández',
             'date_birth' => '1997-01-05',
             'country' => 'España',
-            'username' => 'fmhj97',
-            'email' => 'fmhj97@gmail.com',
+            'username' => 'admin123',
+            'email' => 'admin123@gmail.com',
             'role' => 'admin',
             'password' => Hash::make('123456789'),
         ]);
 
         /*
-        Insertamos los géneros de los relatos.
+        Insertamos los géneros literarios.
+        Con insert se insertan todos los registros en una sola consulta SQL.
+        No se incluirán los timestamps porque no se requiere saber cuándo se creó o actualizó un género.
         */
-        Genero::factory()->create([
+        Genero::insert([
             ['nombre' => 'Acción'],
             ['nombre' => 'Aventura'],
             ['nombre' => 'Ciencia ficción'],
@@ -49,10 +51,11 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Suspense'],
             ['nombre' => 'No ficción'],
             ['nombre' => 'Histórico'],
-            ['nombre' => 'Paranormal'],
+            ['nombre' => 'Sobrenatural'],
             ['nombre' => 'Psicológico'],
             ['nombre' => 'Distopía'],
             ['nombre' => 'Post-apocalíptico'],
         ]);
+
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('generos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
-            $table->timestamps();
+            // $table->timestamps(); // No es necesario porque no se requiere saber cuándo se creó o actualizó un género
         });
     }
 
