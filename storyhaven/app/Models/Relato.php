@@ -36,5 +36,4 @@ class Relato extends Model
     {
         return $this->belongsToMany(Genero::class);
     }
-
 }

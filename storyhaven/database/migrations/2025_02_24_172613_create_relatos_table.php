@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('titulo');
             $table->string('resumen');
-            $table->string('contenido_url');
+            $table->string('contenido_pdf');
             $table->timestamp('fecha_publicacion');
             $table->timestamps();
             $table->softDeletes();

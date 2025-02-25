@@ -18,18 +18,22 @@
                         <div>
                             <!-- Título del relato -->
                             <div>
-                                <x-input-label for="title" :value="__('Título del relato')" />
-                                <x-text-input id="title" class="block w-full mt-1" type="text" name="title"
-                                    :value="old('title')" autofocus required />
-                                <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                                <x-input-label for="titulo" :value="__('Título del relato')" />
+                                <x-text-input id="titulo" class="block w-full mt-1" type="text" name="titulo"
+                                    :value="old('titulo')" autofocus required />
+                                @error('titulo')
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- Resumen del relato -->
                             <div class="mt-4">
-                                <x-input-label for="summary" :value="__('Resumen')" />
-                                <x-text-input id="summary" class="block w-full mt-1" type="text" name="summary"
-                                    :value="old('summary')" required />
-                                <x-input-error :messages="$errors->get('summary')" class="mt-2" />
+                                <x-input-label for="resumen" :value="__('Resumen')" />
+                                <x-text-input id="resumen" class="block w-full mt-1" type="text" name="resumen"
+                                    :value="old('resumen')" required />
+                                @error('resumen')
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- Géneros del relato -->
@@ -43,14 +47,20 @@
                                         </label>
                                     @endforeach
                                 </div>
+                                @error('generos')
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <!-- Subida de PDF -->
                             <div class="mt-4">
-                                <x-input-label for="pdf" :value="__('Subir PDF')" />
-                                <input id="pdf" class="block w-full mt-1 border" type="file" name="pdf"
-                                    accept="application/pdf" required onchange="previewPDF(event)" />
-                                <x-input-error :messages="$errors->get('pdf')" class="mt-2" />
+                                <x-input-label for="contenido_pdf" :value="__('Subir PDF')" />
+                                <input id="contenido_pdf" class="block w-full mt-1 border" type="file"
+                                    name="contenido_pdf" accept="application/pdf" required
+                                    onchange="previewPDF(event)" />
+                                @error('contenido_pdf')
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="flex items-center justify-start mt-4">

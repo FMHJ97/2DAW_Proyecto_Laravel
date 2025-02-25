@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Relato;
 use App\Models\User;
 use App\Models\Genero;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -40,7 +41,45 @@ class RelatoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validamos los datos del formulario.
+        $request->validate([
+            'titulo' => 'required|string|max:255', // El título es obligatorio y tiene un máximo de 255 caracteres.
+            'resumen' => 'required|string|max:255', // El resumen es obligatorio y tiene un máximo de 255 caracteres.
+            'contenido_pdf' => 'required|file|mimes:pdf', // El contenido es obligatorio y debe ser un archivo PDF.
+            'generos' => 'required|array|min:1|max:4', // Se deben seleccionar entre 1 y 4 géneros.
+        ]);
+
+        // Creamos un nuevo relato.
+        try {
+            // Creamos un nuevo relato con los datos recibidos.
+            $relato = new Relato();
+            $relato->titulo = $request->titulo;
+            $relato->resumen = $request->resumen;
+            // Guardamos como fecha de publicación la fecha y hora actuales.
+            $relato->fecha_publicacion = now();
+            // Guardamos el contenido PDF (ruta) en la base de datos.
+            $nombre_pdf = time() . "_" . $request->file('contenido_pdf')->getClientOriginalName();
+            $relato->contenido_pdf = $nombre_pdf;
+            // Guardamos el ID del usuario autenticado.
+            $relato->user_id = Auth::id();
+            // Guardamos el relato en la base de datos.
+            $relato->save();
+            // A continuación, guardamos el fichero PDF en la carpeta 'public/relatos'.
+            $request->file('contenido_pdf')->storeAs('relatos', $nombre_pdf, 'public');
+
+            // Guardamos los géneros del relato en la tabla pivote 'genero_relato'.
+            // Como es un array, recorremos los géneros seleccionados.
+            foreach ($request->generos as $genero_id) {
+                // Guardamos el género en la tabla pivote.
+                $relato->generos()->attach($genero_id);
+            }
+
+            // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
+            return to_route('relatos.index')->with('success', 'Relato guardado correctamente.');
+        } catch (QueryException $e) {
+            // Retornamos a la vista anterior con un mensaje de error.
+            return back()->with('error', 'Error al guardar el relato.');
+        }
     }
 
     /**
@@ -74,5 +113,4 @@ class RelatoController extends Controller
     {
         //
     }
-
 }
