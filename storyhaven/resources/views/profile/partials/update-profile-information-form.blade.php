@@ -36,22 +36,27 @@
         <!-- Fecha de Nacimiento y País -->
         <div class="flex mt-4 space-x-4">
             <div class="w-1/2">
-                <x-input-label for="date_birth" :value="__('Fecha de Nacimiento')" />
+                <x-input-label for="date_birth" :value="__('Fecha de Nacimiento (mm/dd/yyyy)')" />
                 <x-text-input id="date_birth" class="block w-full mt-1" type="date" name="date_birth"
-                    :value="old('date_birth')" required />
+                    :value="old('date_birth', $user->date_birth)" required />
                 <x-input-error :messages="$errors->get('date_birth')" class="mt-2" />
             </div>
 
             <div class="w-1/2">
                 <x-input-label for="country" :value="__('País')" />
                 <select id="country" name="country" class="block w-full mt-1 border-gray-300 rounded-lg shadow-sm"
-                    :value="old('country')" required>
-                    <option value="" disabled selected>{{ __('Seleccionar país') }}</option>
-                    <option value="España">{{ __('España') }}</option>
-                    <option value="Italia">{{ __('Italia') }}</option>
-                    <option value="Portugal">{{ __('Portugal') }}</option>
-                    <option value="Inglaterra">{{ __('Inglaterra') }}</option>
-                    <option value="Francia">{{ __('Francia') }}</option>
+                    required>
+                    <option value="" disabled>{{ __('Seleccionar país') }}</option>
+                    <option value="España" {{ old('country', $user->country) == 'España' ? 'selected' : '' }}>
+                        {{ __('España') }}</option>
+                    <option value="Italia" {{ old('country', $user->country) == 'Italia' ? 'selected' : '' }}>
+                        {{ __('Italia') }}</option>
+                    <option value="Portugal" {{ old('country', $user->country) == 'Portugal' ? 'selected' : '' }}>
+                        {{ __('Portugal') }}</option>
+                    <option value="Inglaterra" {{ old('country', $user->country) == 'Inglaterra' ? 'selected' : '' }}>
+                        {{ __('Inglaterra') }}</option>
+                    <option value="Francia" {{ old('country', $user->country) == 'Francia' ? 'selected' : '' }}>
+                        {{ __('Francia') }}</option>
                 </select>
                 <x-input-error :messages="$errors->get('country')" class="mt-2" />
             </div>

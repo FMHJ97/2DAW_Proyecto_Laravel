@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Nuevo relato') }}
+            {{ __('Editar relato') }}
         </h2>
         {{-- Mensaje de error proveniente del controlador --}}
         @if (session('error'))
@@ -13,10 +13,11 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    {{-- Formulario para la creación de un nuevo relato --}}
-                    <form method="POST" action="{{ route('relatos.store') }}" enctype="multipart/form-data"
+                    {{-- Formulario para la modificación de un relato --}}
+                    <form method="POST" action="{{ route('relatos.update', $relato) }}" enctype="multipart/form-data"
                         class="grid grid-cols-2 gap-6">
                         @csrf
+                        @method('PUT')
 
                         <!-- Columna izquierda: Campos del formulario -->
                         <div>
@@ -24,7 +25,7 @@
                             <div>
                                 <x-input-label for="titulo" :value="__('Título del relato')" />
                                 <x-text-input id="titulo" class="block w-full mt-1" type="text" name="titulo"
-                                    :value="old('titulo')" autofocus required />
+                                    :value="old('titulo', $relato->titulo)" autofocus required />
                                 @error('titulo')
                                     <span class="text-red-500">{{ $message }}</span>
                                 @enderror
@@ -35,7 +36,7 @@
                                 <x-input-label for="resumen" :value="__('Resumen')" />
                                 <textarea id="resumen" name="resumen" rows="3"
                                     class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    required>{{ old('resumen') }}</textarea>
+                                    required>{{ old('resumen', $relato->resumen) }}</textarea>
                                 @error('resumen')
                                     <span class="text-red-500">{{ $message }}</span>
                                 @enderror
@@ -47,7 +48,9 @@
                                 <div class="flex flex-wrap">
                                     @foreach ($generos as $genero)
                                         <label class="mr-4">
-                                            <input type="checkbox" name="generos[]" value="{{ $genero->id }}">
+                                            <input type="checkbox" name="generos[]" value="{{ $genero->id }}"
+                                                {{-- Si el género está en la lista de géneros del relato, marcarlo --}}
+                                                {{ in_array($genero->id, old('generos', $relato->generos->pluck('id')->toArray())) ? 'checked' : '' }}>
                                             {{ $genero->nombre }}
                                         </label>
                                     @endforeach
@@ -61,26 +64,36 @@
                             <div class="mt-4">
                                 <x-input-label for="contenido_pdf" :value="__('Subir PDF')" />
                                 <input id="contenido_pdf" class="block w-full mt-1 border" type="file"
-                                    name="contenido_pdf" accept="application/pdf" required
-                                    onchange="previewPDF(event)" />
+                                    name="contenido_pdf" accept="application/pdf" onchange="previewPDF(event)" />
                                 @error('contenido_pdf')
                                     <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="flex items-center justify-start mt-4">
+                            <div class="flex items-center justify-start gap-2 mt-4">
                                 <x-primary-button>
-                                    {{ __('Guardar Relato') }}
+                                    {{ __('Actualizar Relato') }}
                                 </x-primary-button>
+                                <x-secondary-button href="{{ route('relatos.index') }}">
+                                    {{ __('Cancelar') }}
+                                </x-secondary-button>
                             </div>
                         </div>
 
                         <!-- Columna derecha: Previsualización del PDF -->
                         <div class="p-4 bg-gray-100 border rounded-lg ">
                             <p class="text-lg font-semibold text-gray-700">Vista previa del PDF</p>
-                            <iframe id="pdfPreview" class="w-full h-[500px] mt-2 border rounded-lg"
-                                style="display: none;"></iframe>
-                            <p id="noFileText" class="mt-2 text-gray-500">No se ha seleccionado ningún archivo.</p>
+                            <!-- Verificar si ya existe un archivo PDF y previsualizarlo -->
+                            @if ($relato->contenido_pdf)
+                                <iframe id="pdfPreview" class="w-full h-[500px] mt-2 border rounded-lg"
+                                    src="{{ asset('storage/relatos/' . $relato->contenido_pdf) }}"></iframe>
+                                <p id="noFileText" class="mt-2 text-gray-500" style="display: none;">No se ha
+                                    seleccionado ningún archivo.</p>
+                            @else
+                                <iframe id="pdfPreview" class="w-full h-[500px] mt-2 border rounded-lg"
+                                    style="display: none;"></iframe>
+                                <p id="noFileText" class="mt-2 text-gray-500">No se ha seleccionado ningún archivo.</p>
+                            @endif
                         </div>
                     </form>
 

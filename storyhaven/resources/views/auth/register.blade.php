@@ -43,14 +43,6 @@
             </div>
         </div>
 
-        <!-- Usuario Address -->
-        <div class="mt-4">
-            <x-input-label for="username" :value="__('Usuario')" />
-            <x-text-input id="username" class="block w-full mt-1" type="text" name="username" :value="old('username')"
-                required autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
-
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
