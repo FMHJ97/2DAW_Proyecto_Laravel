@@ -45,6 +45,14 @@
                                         {{-- Enlace para editar el relato --}}
                                         <a href="{{ route('relatos.edit', $relato) }}"
                                             class="ml-2 text-orange-500 hover:text-orange-700">Editar</a>
+                                        {{-- Enlace para eliminar el relato --}}
+                                        <form action="{{ route('relatos.destroy', $relato) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="ml-2 text-red-500 hover:text-red-700">Eliminar</button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach

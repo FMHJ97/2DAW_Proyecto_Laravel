@@ -21,20 +21,35 @@ Route::middleware('auth')->group(function () {
 /**
  * Ruta para obtener todos los relatos.
  */
-Route::get('/relatos/all', [RelatoController::class, 'getAll'])->name('relatos.all');
+Route::get('/relatos/all', [RelatoController::class, 'getAll'])->name('relatos.all'); // Todos
 
 /**
- * Ruta para descargar un relato.
- * Se requiere autenticación para acceder a esta ruta.
+ * Solo usuarios autenticados pueden acceder a estas rutas.
  */
-Route::get('/relatos/{relato}/descargar', [RelatoController::class, 'download'])
-    ->name('relatos.download')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    // Ruta para obtener los relatos del usuario autenticado.
+    Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index');
+    // Ruta para almacenar un nuevo relato.
+    Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store');
+        // Ruta para crear un nuevo relato.
+        Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create');
+    // Ruta para obtener un relato en específico.
+    Route::get('/relatos/{relato}', [RelatoController::class, 'show'])->name('relatos.show');
+    // Ruta para descargar un relato.
+    Route::get('/relatos/{relato}/descargar', [RelatoController::class, 'download'])->name('relatos.download');
 
-/**
- * Rutas para el recurso 'relatos'.
- * Solo crea las rutas para los métodos index, create, store, show, edit, update y destroy.
- * Se requiere autenticación para acceder a estas rutas.
- */
-Route::resource('relatos', RelatoController::class)->middleware('auth');
+    /**
+     * Rutas para editar, actualizar y eliminar un relato.
+     * Solo el autor del relato puede realizar estas acciones.
+     */
+    Route::middleware('isAuthor')->group(function () {
+        // Ruta para editar un relato.
+        Route::get('/relatos/{relato}/edit', [RelatoController::class, 'edit'])->name('relatos.edit');
+        // Ruta para actualizar un relato.
+        Route::put('/relatos/{relato}', [RelatoController::class, 'update'])->name('relatos.update');
+        // Ruta para eliminar un relato.
+        Route::delete('/relatos/{relato}', [RelatoController::class, 'destroy'])->name('relatos.destroy');
+    });
+});
 
 require __DIR__.'/auth.php';

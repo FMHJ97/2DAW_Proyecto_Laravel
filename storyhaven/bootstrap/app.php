@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'isAuthor' => \App\Http\Middleware\IsAuthor::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

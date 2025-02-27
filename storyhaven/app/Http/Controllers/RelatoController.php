@@ -112,12 +112,6 @@ class RelatoController extends Controller
      */
     public function edit(Relato $relato)
     {
-        // Comprobamos si el autor autenticado es el autor del relato.
-        if (Auth::id() != $relato->user_id) {
-            // Si no es el autor, redirigimos a la vista 'relatos.index' con un mensaje de error.
-            return to_route('relatos.index')->with('error', 'No puedes editar un relato que no has creado.');
-        }
-
         // Obtenemos todos los géneros literarios de la base de datos.
         $generos = Genero::all();
         // Obtenemos la URL del directorio 'storage' donde se encuentra el archivo PDF.
@@ -184,7 +178,12 @@ class RelatoController extends Controller
      */
     public function destroy(Relato $relato)
     {
-        //
+        // Borramos el relato de la base de datos.
+        $relato->delete();
+        // Borramos el archivo PDF del almacenamiento (no lo borramos si queremos conservarlo -> Soft Delete).
+        // Storage::disk('public')->delete('relatos/' . $relato->contenido_pdf);
+        // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
+        return to_route('relatos.index')->with('success', 'Relato eliminado correctamente.');
     }
 
     /**
