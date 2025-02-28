@@ -10,12 +10,29 @@ use Livewire\WithoutUrlPagination;
 
 class UserList extends Component
 {
+
+    public $search = '';
+    public $typeSearch = 'username';
+
     /*
-    Permite la paginación de los registros de la tabla cars.
+    Permite la paginación de los registros de la tabla users.
     WithoutUrlPagination: Permite que la paginación no se vea reflejada
     en la URL.
     */
     use WithPagination, WithoutUrlPagination;
+
+    public function render()
+    {
+        // Obtenemos los usuarios que no sean el usuario autenticado.
+        // Cuando se realiza una búsqueda, se filtran los usuarios por el tipo de búsqueda.
+        $users = User::where('id', '!=', Auth::id())
+            ->when($this->search, function ($query) {
+                $query->where($this->typeSearch, 'like', '%' . $this->search . '%');
+            })
+            ->paginate(5); // Paginamos los resultados.
+
+        return view('livewire.user-list')->with('users', $users);
+    }
 
     public function deleteUser($id)
     {
@@ -48,13 +65,9 @@ class UserList extends Component
         }
     }
 
-    public function render()
+    public function updatingSearch()
     {
-        // Devolvemos todos los usuarios paginados excepto el usuario autenticado.
-        $users = User::where('id', '!=', Auth::id())->paginate(10);
-
-        // Mostramos la vista 'livewire.user-list' con los usuarios paginados.
-        return view('livewire.user-list')->with('users', $users);
+        $this->resetPage();
     }
 
 }

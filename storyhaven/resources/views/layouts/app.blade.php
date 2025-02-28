@@ -20,6 +20,19 @@
 
     {{-- Flowbite --}}
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+    <!-- Styles -->
+    <style>
+        body>* {
+            background-image: url('/images/fondo.jpg');
+            background-size: cover;
+            /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased">

@@ -28,12 +28,12 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'date_birth' => fake()->date(),
             'country' => fake()->randomElement(['España', 'Italia', 'Portugal', 'Inglaterra', 'Francia']),
-            'image' => fake()->imageUrl(),
+            'image' => null,
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'role' => fake()->randomElement(['admin', 'user']),
+            'password' => static::$password ??= Hash::make('123456789'),
+            'role' => 'user',
             'remember_token' => Str::random(10),
         ];
     }

@@ -17,7 +17,11 @@ class RelatoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => fake()->numberBetween(1, 10),
+            'titulo' => fake()->sentence(6),
+            'resumen' => fake()->paragraph(3),
+            'contenido_pdf' => fake()->url(),
+            'fecha_publicacion' => fake()->dateTime(),
         ];
     }
 }

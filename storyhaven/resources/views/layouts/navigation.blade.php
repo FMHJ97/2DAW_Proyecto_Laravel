@@ -12,12 +12,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    {{-- Enlace a la vista de todos los relatos disponibles --}}
-                    <x-nav-link :href="route('relatos.all')" :active="request()->routeIs('relatos.all')" class="mr-0">
-                        {{ __('Explorar') }}
-                    </x-nav-link>
                     {{-- Si existe un usuario autenticado y tiene el rol de usuario --}}
                     @if (Auth::user()->role == 'user')
+                        {{-- Enlace a la vista de todos los relatos disponibles --}}
+                        <x-nav-link :href="route('relatos.all')" :active="request()->routeIs('relatos.all')" class="mr-0">
+                            {{ __('Explorar') }}
+                        </x-nav-link>
                         {{-- Enlace a la vista de relatos del usuario autenticado --}}
                         <x-nav-link :href="route('relatos.index')" :active="request()->routeIs('relatos.index')">
                             {{ __('Mis relatos') }}
@@ -30,6 +30,10 @@
                         {{-- Enlace a la vista de administración de usuarios --}}
                         <x-nav-link :href="route('admin.usuarios')" :active="request()->routeIs('admin.usuarios')">
                             {{ __('Administrar usuarios') }}
+                        </x-nav-link>
+                        {{-- Enlace a la vista de administración de relatos --}}
+                        <x-nav-link :href="route('admin.relatos')" :active="request()->routeIs('admin.relatos')">
+                            {{ __('Administrar relatos') }}
                         </x-nav-link>
                     @endif
                 </div>

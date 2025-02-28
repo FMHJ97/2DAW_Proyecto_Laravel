@@ -14,6 +14,21 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Styles -->
+    <style>
+        body>div {
+            background-image: url('/images/fondo.jpg');
+            background-size: cover;
+            /* Ajusta la imagen al tamaño de la pantalla */
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            /* Asegura que el fondo cubra toda la pantalla */
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body class="font-sans antialiased text-gray-900">

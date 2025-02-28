@@ -61,6 +61,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/usuarios', function () {
             return view('admin.usuarios');
         })->name('admin.usuarios');
+        // Ruta para obtener todos los relatos.
+        Route::get('/admin/relatos', function () {
+            return view('admin.relatos');
+        })->name('admin.relatos');
     });
 });
 

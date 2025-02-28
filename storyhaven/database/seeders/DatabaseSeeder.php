@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Genero;
 use App\Models\User;
+use App\Models\Relato;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
 
         /*
         Insertamos un usuario administrador.
@@ -57,6 +58,8 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Post-apocalíptico'],
             ['nombre' => 'Bélico'],
         ]);
+
+        Relato::factory(10)->create();
 
     }
 }
