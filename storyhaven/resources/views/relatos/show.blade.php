@@ -51,8 +51,8 @@
 
                     {{-- Volver a la lista de relatos --}}
                     <div class="mt-6">
-                        <a href="{{ route('relatos.index') }}" class="text-blue-500 hover:underline">
-                            &larr; Volver a mis relatos
+                        <a href="{{ route('relatos.all') }}" class="text-blue-500 hover:underline">
+                            &larr; Volver a Inicio
                         </a>
                     </div>
                 </div>

@@ -26,6 +26,11 @@
                         <x-nav-link :href="route('relatos.create')" :active="request()->routeIs('relatos.create')">
                             {{ __('Nuevo relato') }}
                         </x-nav-link>
+                    @elseif (Auth::user()->role == 'admin')
+                        {{-- Enlace a la vista de administración de usuarios --}}
+                        <x-nav-link :href="route('admin.usuarios')" :active="request()->routeIs('admin.usuarios')">
+                            {{ __('Administrar usuarios') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -36,7 +41,7 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->username }}</div>
 
                             <div class="ms-1">
                                 <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
@@ -87,15 +92,32 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('relatos.index')" :active="request()->routeIs('relatos.index')">
-                {{ __('Mis relatos') }}
+            {{-- Enlace a la vista de todos los relatos disponibles --}}
+            <x-responsive-nav-link :href="route('relatos.all')" :active="request()->routeIs('relatos.all')">
+                {{ __('Explorar') }}
             </x-responsive-nav-link>
+            {{-- Si existe un usuario autenticado y tiene el rol de usuario --}}
+            @if (Auth::user()->role == 'user')
+                {{-- Enlace a la vista de relatos del usuario autenticado --}}
+                <x-responsive-nav-link :href="route('relatos.index')" :active="request()->routeIs('relatos.index')">
+                    {{ __('Mis relatos') }}
+                </x-responsive-nav-link>
+                {{-- Enlace a la vista de creación de relatos --}}
+                <x-responsive-nav-link :href="route('relatos.create')" :active="request()->routeIs('relatos.create')">
+                    {{ __('Nuevo relato') }}
+                </x-responsive-nav-link>
+            @elseif (Auth::user()->role == 'admin')
+                {{-- Enlace a la vista de administración de usuarios --}}
+                <x-responsive-nav-link :href="route('admin.usuarios')" :active="request()->routeIs('admin.usuarios')">
+                    {{ __('Administrar usuarios') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="text-base font-medium text-gray-800">{{ Auth::user()->name }}</div>
+                <div class="text-base font-medium text-gray-800">{{ Auth::user()->username }}</div>
                 <div class="text-sm font-medium text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 

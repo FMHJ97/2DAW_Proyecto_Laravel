@@ -20,7 +20,7 @@
                                     <h3 class="text-xl font-semibold text-gray-800">{{ $relato->titulo }}</h3>
                                     {{-- Nombre del autor del relato --}}
                                     <p class="text-gray-500">
-                                        <strong>Autor:</strong> {{ $relato->autor->name }} {{ $relato->autor->surname }}
+                                        <strong>Autor:</strong> {{ $relato->autor->username }}
                                     </p>
                                     {{-- Fecha de publicación del relato --}}
                                     <p class="text-gray-500">

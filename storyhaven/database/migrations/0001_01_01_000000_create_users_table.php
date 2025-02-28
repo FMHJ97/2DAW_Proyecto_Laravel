@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('surname');
             $table->date('date_birth');
             $table->enum('country', ['España', 'Italia', 'Portugal', 'Inglaterra', 'Francia'])->default('España');
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();

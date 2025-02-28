@@ -43,12 +43,23 @@
             </div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')"
-                required autocomplete="email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Nombre de Usuario y Email -->
+        <div class="flex mt-4 space-x-4">
+            <!-- Nombre de Usuario -->
+            <div class="w-1/2">
+                <x-input-label for="username" :value="__('Usuario')" />
+                <x-text-input id="username" class="block w-full mt-1" type="text" name="username" :value="old('username')"
+                    required />
+                <x-input-error :messages="$errors->get('username')" class="mt-2" />
+            </div>
+
+            <!-- Email Address -->
+            <div class="w-1/2">
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')"
+                    required autocomplete="email" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
         </div>
 
         <!-- Contraseña y Confirmar Contraseña -->

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RelatoController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,8 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index');
     // Ruta para almacenar un nuevo relato.
     Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store');
-        // Ruta para crear un nuevo relato.
-        Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create');
+    // Ruta para crear un nuevo relato.
+    Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create');
     // Ruta para obtener un relato en específico.
     Route::get('/relatos/{relato}', [RelatoController::class, 'show'])->name('relatos.show');
     // Ruta para descargar un relato.
@@ -43,12 +44,23 @@ Route::middleware('auth')->group(function () {
      * Solo el autor del relato puede realizar estas acciones.
      */
     Route::middleware('isAuthor')->group(function () {
-        // Ruta para editar un relato.
-        Route::get('/relatos/{relato}/edit', [RelatoController::class, 'edit'])->name('relatos.edit');
         // Ruta para actualizar un relato.
         Route::put('/relatos/{relato}', [RelatoController::class, 'update'])->name('relatos.update');
         // Ruta para eliminar un relato.
         Route::delete('/relatos/{relato}', [RelatoController::class, 'destroy'])->name('relatos.destroy');
+        // Ruta para editar un relato.
+        Route::get('/relatos/{relato}/edit', [RelatoController::class, 'edit'])->name('relatos.edit');
+    });
+
+    /**
+     * Rutas para administradores.
+     * Solo los administradores pueden acceder a estas rutas.
+     */
+    Route::middleware('isAdmin')->group(function () {
+        // Ruta para obtener todos los usuarios.
+        Route::get('/admin/usuarios', function () {
+            return view('admin.usuarios');
+        })->name('admin.usuarios');
     });
 });
 

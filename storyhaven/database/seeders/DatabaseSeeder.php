@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             'surname' => 'Hernández',
             'date_birth' => '1997-01-05',
             'country' => 'España',
+            'username' => 'admin123',
             'email' => 'admin123@gmail.com',
             'role' => 'admin',
             'password' => Hash::make('123456789'),
@@ -54,6 +55,7 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Psicológico'],
             ['nombre' => 'Distopía'],
             ['nombre' => 'Post-apocalíptico'],
+            ['nombre' => 'Bélico'],
         ]);
 
     }
