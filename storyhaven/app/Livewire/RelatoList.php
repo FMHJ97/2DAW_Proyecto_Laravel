@@ -9,36 +9,34 @@ use Livewire\WithoutUrlPagination;
 
 class RelatoList extends Component
 {
-
-    public $search = '';
-    public $typeSearch = 'titulo';
-
-    /*
-    Permite la paginación de los registros de la tabla relatos.
-    WithoutUrlPagination: Permite que la paginación no se vea reflejada
-    en la URL.
-    */
     use WithPagination, WithoutUrlPagination;
+
+    public $search = ''; // Variable para la búsqueda.
+    public $typeSearch = 'titulo'; // Variable para el tipo de búsqueda.
+    public $includeDeleted = false; // Variable para incluir relatos eliminados.
 
     public function render()
     {
-        // Obtenemos los relatos, ordenados por fecha de publicación.
-        $relatos = Relato::orderBy('fecha_publicacion', 'desc')
+        $query = Relato::query(); // Consulta a la tabla relatos.
+
+        // Si la variable includeDeleted es true, solo se muestran los relatos eliminados.
+        if ($this->includeDeleted) {
+            $query->onlyTrashed(); // Solo relatos eliminados.
+        }
+
+        // Se ordenan los relatos por fecha de publicación de forma descendente.
+        $relatos = $query
+            ->orderBy('fecha_publicacion', 'desc')
             ->when($this->search, function ($query) {
                 switch ($this->typeSearch) {
-                    // Filtrado por título
                     case 'titulo':
                         $query->where('titulo', 'like', '%' . $this->search . '%');
                         break;
-
-                    // Filtrado por autor
                     case 'autor':
                         $query->whereHas('autor', function ($query) {
                             $query->where('username', 'like', '%' . $this->search . '%');
                         });
                         break;
-
-                    // Filtrado por género
                     case 'generos':
                         $query->whereHas('generos', function ($query) {
                             $query->where('nombre', 'like', '%' . $this->search . '%');
@@ -46,12 +44,10 @@ class RelatoList extends Component
                         break;
                 }
             })
-            ->paginate(5); // Paginamos los resultados.
+            ->paginate(5);
 
-        // Retornamos la vista con los relatos.
         return view('livewire.relato-list')->with('relatos', $relatos);
     }
-
 
     public function deleteRelato($id)
     {
@@ -64,10 +60,15 @@ class RelatoList extends Component
         }
     }
 
-    public function showRelato($id)
+    public function restoreRelato($id)
     {
-        // Redirigimos a la vista del relato.
-        return redirect()->route('relatos.show', $id);
+        // Buscamos el relato por su id.
+        $relato = Relato::withTrashed()->find($id);
+
+        if ($relato) {
+            // Restauramos el relato.
+            $relato->restore();
+        }
     }
 
     public function updatingSearch()
