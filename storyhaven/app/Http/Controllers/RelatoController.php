@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Http\Requests\RelatoFormRequest;
 
 class RelatoController extends Controller
 {
@@ -53,15 +54,10 @@ class RelatoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RelatoFormRequest $request)
     {
         // Validamos los datos del formulario.
-        $request->validate([
-            'titulo' => 'required|string|max:255', // El título es obligatorio y tiene un máximo de 255 caracteres.
-            'resumen' => 'required|string', // El resumen es obligatorio.
-            'contenido_pdf' => 'required|file|mimes:pdf', // El contenido es obligatorio y debe ser un archivo PDF.
-            'generos' => 'required|array|min:1|max:4', // Se deben seleccionar entre 1 y 4 géneros.
-        ]);
+        $request->validated();
 
         // Creamos un nuevo relato.
         try {
@@ -124,15 +120,10 @@ class RelatoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Relato $relato)
+    public function update(RelatoFormRequest $request, Relato $relato)
     {
         // Validamos los datos del formulario.
-        $request->validate([
-            'titulo' => 'required|string|max:255', // El título es obligatorio y tiene un máximo de 255 caracteres.
-            'resumen' => 'required|string', // El resumen es obligatorio.
-            'contenido_pdf' => 'file|mimes:pdf', // El contenido debe ser un archivo PDF.
-            'generos' => 'required|array|min:1|max:4', // Se deben seleccionar entre 1 y 4 géneros.
-        ]);
+        $request->validated();
 
         // Actualizamos el relato.
         try {
