@@ -21,7 +21,7 @@
                     {{-- Autor del relato --}}
                     <p class="mt-2 text-gray-700">
                         <span class="font-semibold">Autor:</span> {{ $relato->autor->name }}
-                        {{ $relato->autor->surname }}
+                        {{ $relato->autor->surname }} ({{ $relato->autor->username }})
                     </p>
 
                     {{-- Géneros --}}

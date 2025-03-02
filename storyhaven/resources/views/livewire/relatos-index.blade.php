@@ -1,4 +1,22 @@
 <div>
+    {{-- Buscador --}}
+    <div class="max-w-lg mb-5">
+        <div class="flex">
+            <!-- Dropdown de tipo de búsqueda -->
+            <select wire:model.live="typeSearch"
+                class="shrink-0 z-10 inline-flex items-center py-2.5 px-6 pe-8 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none">
+                <option value="titulo">Título</option>
+                <option value="generos">Género</option>
+            </select>
+
+            <!-- Input de búsqueda -->
+            <div class="relative w-full">
+                <input type="text" wire:model.live="search"
+                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none"
+                    placeholder="Buscar..." />
+            </div>
+        </div>
+    </div>
     {{-- Mostramos todos los posibles relatos que tenga el usuario --}}
     @if ($relatos->isNotEmpty())
         {{-- Mostramos los relatos en una cuadrícula --}}
