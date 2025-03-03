@@ -155,8 +155,8 @@ class RelatoController extends Controller
                 $relato->generos()->attach($genero_id);
             }
 
-            // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
-            return to_route('relatos.index')->with('success', 'Relato modificado correctamente.');
+            // Redirigimos a la vista detallada del relato con un mensaje de éxito.
+            return to_route('relatos.show', $relato)->with('success', 'Relato actualizado correctamente.');
         } catch (QueryException $e) {
             // Retornamos a la vista anterior con un mensaje de error.
             return back()->with('error', 'Error al guardar el relato.');

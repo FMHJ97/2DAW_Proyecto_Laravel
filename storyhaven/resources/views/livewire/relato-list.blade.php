@@ -1,10 +1,11 @@
 <div>
-    {{-- Buscador --}}
-    <div class="max-w-lg mb-5">
-        <div class="flex">
+    {{-- Buscador y filtro de eliminados en la misma línea --}}
+    <div class="flex items-center justify-between mb-6">
+        {{-- Buscador (1/3 del ancho) --}}
+        <div class="flex w-1/3">
             <!-- Dropdown de tipo de búsqueda -->
             <select wire:model.live="typeSearch"
-                class="shrink-0 z-10 inline-flex items-center py-2.5 px-6 pe-8 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none">
+                class="z-10 ps-4 pe-8 py-2.5 text-sm font-medium rounded-l-lg text-indigo-700 bg-indigo-50 border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="titulo">Título</option>
                 <option value="generos">Género</option>
                 <option value="autor">Autor</option>
@@ -13,28 +14,52 @@
             <!-- Input de búsqueda -->
             <div class="relative w-full">
                 <input type="text" wire:model.live="search"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none"
-                    placeholder="Buscar..." />
+                    class="block w-full p-2.5 text-sm rounded-r-lg border-l-0 bg-white border border-indigo-300 text-gray-700 focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Buscar relatos..." />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        {{-- Selector de tipo de vista (activos/eliminados) --}}
+        <div class="flex items-center justify-end">
+            <div class="inline-flex items-center p-2 border border-indigo-200 rounded-lg bg-indigo-50">
+                <input id="filter-deleted" type="checkbox" wire:model.live="includeDeleted" wire:click="resetPage"
+                    class="w-4 h-4 bg-gray-100 rounded text-amber-600 border-amber-300 focus:ring-amber-500">
+                <label for="filter-deleted" class="flex items-center ml-2 text-sm font-medium text-amber-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Mostrar solo relatos eliminados
+                </label>
             </div>
         </div>
     </div>
 
-    {{-- Mostrar relatos eliminados --}}
-    <div class="flex items-center mb-4 me-4">
-        <input id="yellow-checkbox" type="checkbox" wire:model.live="includeDeleted"
-            class="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 rounded-sm focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label for="yellow-checkbox" class="text-sm font-medium text-gray-900 ms-2 dark:text-gray-900">
-            Mostrar solo relatos eliminados
-        </label>
-    </div>
-
     @if ($relatos->isEmpty())
-        <p class="text-gray-500">No hay relatos disponibles.</p>
+        <div class="p-8 text-center rounded-lg bg-indigo-50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 text-indigo-400" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <p class="text-lg font-medium text-indigo-700">No hay relatos disponibles</p>
+            <p class="mt-2 text-gray-600">
+                {{ $includeDeleted ? 'No hay relatos eliminados en este momento.' : 'No se encontraron relatos que coincidan con los criterios de búsqueda.' }}
+            </p>
+        </div>
     @else
         {{-- Tabla de relatos --}}
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead class="text-xs text-white uppercase bg-blue-600 dark:bg-gray-700">
+        <div class="relative overflow-x-auto border border-indigo-200 rounded-lg shadow-sm">
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="text-xs text-white uppercase bg-indigo-600">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">
                             Título
@@ -53,45 +78,55 @@
                 <tbody>
                     @foreach ($relatos as $relato)
                         <tr wire:key='relato-{{ $relato->id }}'
-                            class="text-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                            <td scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            class="text-center bg-white border-b border-indigo-100 hover:bg-slate-50 {{ $relato->deleted_at ? 'bg-red-50' : '' }}">
+                            <td scope="row" class="px-6 py-4 font-medium text-indigo-800 whitespace-nowrap">
                                 {{ $relato->titulo }}
                             </td>
-                            <td class="inline-flex gap-2 px-6 py-4">
-                                @foreach ($relato->generos as $genero)
-                                    <span
-                                        class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-700">
-                                        {{ $genero->nombre }}
-                                    </span>
-                                @endforeach
+                            <td class="px-6 py-4">
+                                <div class="flex flex-wrap justify-center gap-2">
+                                    @foreach ($relato->generos as $genero)
+                                        <span
+                                            class="px-2 py-1 text-xs font-medium text-purple-800 bg-purple-200 rounded-full">
+                                            {{ $genero->nombre }}
+                                        </span>
+                                    @endforeach
+                                </div>
                             </td>
                             <td class="px-6 py-4">
-                                {{ $relato->autor->username }}
+                                <span class="font-medium text-indigo-600">{{ $relato->autor->username }}</span>
                             </td>
                             <td class="flex items-center justify-center gap-3 py-4 text-sm">
-                                {{-- Si el relato está eliminado, mostrar el botón de restaurar --}}
                                 @if ($relato->deleted_at)
+                                    {{-- Si el relato está eliminado, solo botón de restaurar --}}
                                     <button wire:click="restoreRelato({{ $relato->id }})"
-                                        class="flex items-center px-3 py-1 text-sm font-semibold text-white transition bg-yellow-500 rounded hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800">
-                                        <svg class="w-5 h-5 mr-2 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                                        class="flex items-center px-3 py-1.5 text-sm font-medium text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-2 focus:ring-amber-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
                                         Restaurar
                                     </button>
                                 @else
+                                    {{-- Si el relato está activo, mostrar botones de ver y eliminar --}}
+                                    <a href="{{ route('relatos.show', $relato->id) }}"
+                                        class="flex items-center px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Ver
+                                    </a>
                                     <button wire:click="deleteRelato({{ $relato->id }})"
-                                        class="flex items-center px-3 py-1 text-sm font-semibold text-white transition bg-red-500 rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-                                        <svg class="w-5 h-5 mr-2 text-gray-800 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        wire:confirm="¿Estás seguro de que quieres eliminar este relato? Podrás restaurarlo más tarde."
+                                        class="flex items-center px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
                                         Eliminar
                                     </button>
@@ -103,9 +138,111 @@
             </table>
         </div>
 
-        {{-- Paginación --}}
-        <div class="mt-4" wire:ignore.self>
-            {{ $relatos->links() }}
+        {{-- Paginación con estilo personalizado --}}
+        <div class="mt-6" wire:ignore.self>
+            <div class="pagination-custom">
+                @if ($relatos->hasPages())
+                    <nav role="navigation" aria-label="Pagination Navigation"
+                        class="flex items-center justify-between">
+                        {{-- Links para pantallas pequeñas --}}
+                        <div class="flex justify-between flex-1 sm:hidden">
+                            @if ($relatos->onFirstPage())
+                                <span
+                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-md cursor-default">
+                                    Anterior
+                                </span>
+                            @else
+                                <button wire:click="previousPage" wire:loading.attr="disabled" rel="prev"
+                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-700 bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    Anterior
+                                </button>
+                            @endif
+
+                            @if ($relatos->hasMorePages())
+                                <button wire:click="nextPage" wire:loading.attr="disabled" rel="next"
+                                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-indigo-700 bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    Siguiente
+                                </button>
+                            @else
+                                <span
+                                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-md cursor-default">
+                                    Siguiente
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Links para pantallas medianas+ --}}
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+                            <div>
+                                <span class="relative z-0 inline-flex rounded-md shadow-sm">
+                                    {{-- Botón Anterior --}}
+                                    @if ($relatos->onFirstPage())
+                                        <span aria-disabled="true" aria-label="{{ __('pagination.previous') }}">
+                                            <span
+                                                class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-l-md"
+                                                aria-hidden="true">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    @else
+                                        <button wire:click="previousPage" rel="prev"
+                                            class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-300 rounded-l-md hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    @endif
+
+                                    {{-- Páginas numeradas --}}
+                                    @foreach ($relatos->getUrlRange(max(1, $relatos->currentPage() - 2), min($relatos->lastPage(), $relatos->currentPage() + 2)) as $page => $url)
+                                        @if ($page == $relatos->currentPage())
+                                            <span aria-current="page">
+                                                <span
+                                                    class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-white bg-indigo-600 border border-indigo-600 cursor-default">{{ $page }}</span>
+                                            </span>
+                                        @else
+                                            <button wire:click="gotoPage({{ $page }})"
+                                                class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-indigo-600 bg-white border border-indigo-300 hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                {{ $page }}
+                                            </button>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Botón Siguiente --}}
+                                    @if ($relatos->hasMorePages())
+                                        <button wire:click="nextPage" rel="next"
+                                            class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-600 bg-white border border-indigo-300 rounded-r-md hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <span aria-disabled="true" aria-label="{{ __('pagination.next') }}">
+                                            <span
+                                                class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-r-md"
+                                                aria-hidden="true">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                    </nav>
+                @endif
+            </div>
         </div>
     @endif
 </div>

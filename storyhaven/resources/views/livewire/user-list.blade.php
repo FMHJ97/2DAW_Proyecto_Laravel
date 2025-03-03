@@ -1,29 +1,47 @@
 <div>
     {{-- Buscador --}}
-    <div class="max-w-lg mb-5">
-        <div class="flex">
-            <!-- Dropdown de tipo de búsqueda -->
-            <select wire:model.live="typeSearch"
-                class="shrink-0 z-10 inline-flex items-center py-2.5 px-6 pe-8 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none">
-                <option value="username">Usuario</option>
-                <option value="email">Email</option>
-            </select>
+    <div class="mb-6">
+        <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0 md:space-x-4">
+            <div class="flex w-full md:w-1/3">
+                <!-- Dropdown de tipo de búsqueda -->
+                <select wire:model.live="typeSearch"
+                    class="z-10 ps-4 pe-8 py-2.5 text-sm font-medium rounded-l-lg text-indigo-700 bg-indigo-50 border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="username">Usuario</option>
+                    <option value="email">Email</option>
+                </select>
 
-            <!-- Input de búsqueda -->
-            <div class="relative w-full">
-                <input type="text" wire:model.live="search"
-                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none"
-                    placeholder="Buscar..." />
+                <!-- Input de búsqueda -->
+                <div class="relative w-full">
+                    <input type="text" wire:model.live="search"
+                        class="block w-full p-2.5 text-sm rounded-r-lg border-l-0 bg-white border border-indigo-300 text-gray-700 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Buscar usuarios..." />
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     @if ($users->isEmpty())
-        <p class="text-gray-500">No hay usuarios disponibles.</p>
+        <div class="p-8 text-center rounded-lg bg-indigo-50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 text-indigo-400" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <p class="text-lg font-medium text-indigo-700">No hay usuarios disponibles</p>
+            <p class="mt-2 text-gray-600">No se encontraron usuarios que coincidan con los criterios de búsqueda.</p>
+        </div>
     @else
         {{-- Tabla de usuarios --}}
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead class="text-xs text-white uppercase bg-blue-600 dark:bg-gray-700">
+        <div class="relative overflow-x-auto border border-indigo-200 rounded-lg shadow-sm">
+            <table class="w-full text-sm text-left text-gray-600">
+                <thead class="text-xs text-white uppercase bg-indigo-600">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center">
                             Nombre y apellidos
@@ -45,49 +63,44 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr wire:key='user-{{ $user->id }}'
-                            class="text-center bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                            <td scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            class="text-center bg-white border-b border-indigo-100 hover:bg-slate-50">
+                            <td scope="row" class="px-6 py-4 font-medium text-indigo-800 whitespace-nowrap">
                                 {{ $user->name }} {{ $user->surname }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $user->username }}
+                                <span class="font-medium text-indigo-600">{{ $user->username }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 {{ $user->email }}
                             </td>
                             <td class="px-6 py-4">
                                 @if ($user->role == 'admin')
-                                    <span
-                                        class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:text-yellow-100 dark:bg-yellow-700">
+                                    <span class="px-3 py-1 font-semibold rounded-full text-amber-700 bg-amber-100">
                                         Administrador
                                     </span>
                                 @else
-                                    <span
-                                        class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-700">
+                                    <span class="px-3 py-1 font-semibold text-indigo-700 bg-indigo-100 rounded-full">
                                         Usuario
                                     </span>
                                 @endif
                             </td>
                             <td class="flex items-center justify-center gap-3 py-4 text-sm">
                                 <button wire:click="switchRole({{ $user->id }})"
-                                    class="flex items-center px-3 py-1 text-sm font-semibold text-white transition bg-green-500 rounded hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800">
-                                    <svg class="w-5 h-5 mr-2 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M8 20V7m0 13-4-4m4 4 4-4m4-12v13m0-13 4 4m-4-4-4 4" />
+                                    class="flex items-center px-3 py-1.5 text-sm font-medium text-white transition bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-2 focus:ring-amber-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                                     </svg>
                                     Cambiar Rol
                                 </button>
                                 <button wire:click="deleteUser({{ $user->id }})"
-                                    class="flex items-center px-3 py-1 text-sm font-semibold text-white transition bg-red-500 rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
-                                    <svg class="w-5 h-5 mr-2 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    wire:confirm="¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer."
+                                    class="flex items-center px-3 py-1.5 text-sm font-medium text-white transition bg-red-600 rounded-lg hover:bg-red-700 focus:ring-2 focus:ring-red-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1.5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                     Eliminar
                                 </button>
@@ -97,9 +110,111 @@
                 </tbody>
             </table>
         </div>
-        {{-- Paginación --}}
-        <div class="mt-4" wire:ignore.self>
-            {{ $users->links() }}
+
+        {{-- Paginación con estilo personalizado --}}
+        <div class="mt-6" wire:ignore.self>
+            <div class="pagination-custom">
+                @if ($users->hasPages())
+                    <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
+                        {{-- Links para pantallas pequeñas --}}
+                        <div class="flex justify-between flex-1 sm:hidden">
+                            @if ($users->onFirstPage())
+                                <span
+                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-md cursor-default">
+                                    Anterior
+                                </span>
+                            @else
+                                <button wire:click="previousPage" wire:loading.attr="disabled" rel="prev"
+                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-700 bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    Anterior
+                                </button>
+                            @endif
+
+                            @if ($users->hasMorePages())
+                                <button wire:click="nextPage" wire:loading.attr="disabled" rel="next"
+                                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-indigo-700 bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    Siguiente
+                                </button>
+                            @else
+                                <span
+                                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-md cursor-default">
+                                    Siguiente
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Links para pantallas medianas+ --}}
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+                            <div>
+                                <span class="relative z-0 inline-flex rounded-md shadow-sm">
+                                    {{-- Botón Anterior --}}
+                                    @if ($users->onFirstPage())
+                                        <span aria-disabled="true" aria-label="{{ __('pagination.previous') }}">
+                                            <span
+                                                class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-l-md"
+                                                aria-hidden="true">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    @else
+                                        <button wire:click="previousPage" rel="prev"
+                                            class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-300 rounded-l-md hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    @endif
+
+                                    {{-- Páginas numeradas --}}
+                                    @foreach ($users->getUrlRange(max(1, $users->currentPage() - 2), min($users->lastPage(), $users->currentPage() + 2)) as $page => $url)
+                                        @if ($page == $users->currentPage())
+                                            <span aria-current="page">
+                                                <span
+                                                    class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-white bg-indigo-600 border border-indigo-600 cursor-default">{{ $page }}</span>
+                                            </span>
+                                        @else
+                                            <button wire:click="gotoPage({{ $page }})"
+                                                class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-indigo-600 bg-white border border-indigo-300 hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                {{ $page }}
+                                            </button>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Botón Siguiente --}}
+                                    @if ($users->hasMorePages())
+                                        <button wire:click="nextPage" rel="next"
+                                            class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-600 bg-white border border-indigo-300 rounded-r-md hover:bg-indigo-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <span aria-disabled="true" aria-label="{{ __('pagination.next') }}">
+                                            <span
+                                                class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-gray-300 bg-white border border-gray-300 cursor-default rounded-r-md"
+                                                aria-hidden="true">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                    </nav>
+                @endif
+            </div>
         </div>
     @endif
 </div>
