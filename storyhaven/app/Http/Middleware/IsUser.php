@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class IsAuthor
+class IsUser
 {
     /**
      * Handle an incoming request.
@@ -16,14 +16,12 @@ class IsAuthor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Obtenemos el relato a través de la ruta.
-        $relato = $request->route('relato');
-        // Comprobamos si el relato existe y si el usuario autenticado es el autor.
-        if (!$relato || $relato->user_id !== Auth::id()) {
-            // Si no es el autor, redirigimos a la página de inicio con un mensaje de error.
-            return to_route('relatos.all')->with('error', 'No eres el autor del relato.');
+        // Comprobamos si el usuario autenticado es un usuario normal.
+        if (Auth::user()->role !== 'user') {
+            // Si no es un usuario normal, redirigimos a la página de inicio con un mensaje de error.
+            return redirect()->route('inicio')->with('error', 'No tienes permisos para acceder a esta página.');
         }
-
+        // Si es un usuario normal, continuamos con la petición.
         return $next($request);
     }
 }

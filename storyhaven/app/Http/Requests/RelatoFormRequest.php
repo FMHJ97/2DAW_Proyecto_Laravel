@@ -23,7 +23,7 @@ class RelatoFormRequest extends FormRequest
     {
         return [
             'titulo' => 'required|string|max:100', // El título es obligatorio y tiene un máximo de 100 caracteres.
-            'resumen' => 'required|string|max:300', // El resumen es obligatorio y tiene un máximo de 300 caracteres.
+            'resumen' => 'required|string|max:350', // El resumen es obligatorio y tiene un máximo de 350 caracteres.
             'contenido_pdf' => 'file|mimes:pdf', // El contenido debe ser un archivo PDF.
             'generos' => 'required|array|min:1|max:4', // Se deben seleccionar entre 1 y 4 géneros.
         ];
@@ -37,7 +37,7 @@ class RelatoFormRequest extends FormRequest
             'titulo.max' => 'El título no puede tener más de 100 caracteres.',
             'resumen.required' => 'El resumen es obligatorio.',
             'resumen.string' => 'El resumen debe ser una cadena de texto.',
-            'resumen.max' => 'El resumen no puede tener más de 300 caracteres.',
+            'resumen.max' => 'El resumen no puede tener más de 350 caracteres.',
             'contenido_pdf.file' => 'El contenido debe ser un archivo.',
             'contenido_pdf.mimes' => 'El contenido debe ser un archivo PDF.',
             'generos.required' => 'Debes seleccionar al menos un género literario.',
