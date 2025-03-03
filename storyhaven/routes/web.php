@@ -12,24 +12,25 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return view('dashboard');
-})->name('dashboard');
+})->name('inicio');
+
+/**
+ * Ruta para obtener todos los relatos.
+ * Puede ser accedida por cualquier usuario.
+ */
+Route::get('/relatos/all', [RelatoController::class, 'getAll'])->name('relatos.all');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-/**
- * Ruta para obtener todos los relatos.
- */
-Route::get('/relatos/all', [RelatoController::class, 'getAll'])->name('relatos.all'); // Todos
 
 /**
  * Solo usuarios autenticados pueden acceder a estas rutas.
@@ -40,7 +41,7 @@ Route::middleware('auth')->group(function () {
     // Ruta para almacenar un nuevo relato.
     Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store');
     // Ruta para crear un nuevo relato.
-    Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create');
+    Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create')->middleware('verified'); // Solo usuarios verificados pueden crear relatos.
     // Ruta para obtener un relato en específico.
     Route::get('/relatos/{relato}', [RelatoController::class, 'show'])->name('relatos.show');
     // Ruta para descargar un relato.
@@ -50,7 +51,7 @@ Route::middleware('auth')->group(function () {
      * Rutas para editar, actualizar y eliminar un relato.
      * Solo el autor del relato puede realizar estas acciones.
      */
-    Route::middleware('isAuthor')->group(function () {
+    Route::middleware('isAuthor', 'verified')->group(function () {
         // Ruta para actualizar un relato.
         Route::put('/relatos/{relato}', [RelatoController::class, 'update'])->name('relatos.update');
         // Ruta para eliminar un relato.
@@ -63,7 +64,7 @@ Route::middleware('auth')->group(function () {
      * Rutas para administradores.
      * Solo los administradores pueden acceder a estas rutas.
      */
-    Route::middleware('isAdmin')->group(function () {
+    Route::middleware('isAdmin', 'verified')->group(function () {
         // Ruta para obtener todos los usuarios.
         Route::get('/admin/usuarios', function () {
             return view('admin.usuarios');
