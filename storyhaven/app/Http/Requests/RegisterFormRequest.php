@@ -2,12 +2,20 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Models\User;
+use Illuminate\Validation\Rules;
 
-class ProfileUpdateRequest extends FormRequest
+class RegisterFormRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true; // Cualquiera puede hacer la petición.
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -20,20 +28,9 @@ class ProfileUpdateRequest extends FormRequest
             'surname' => ['required', 'string', 'max:255'],
             'date_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(12)->format('Y-m-d')], // Se añade la regla 'before_or_equal' para que la fecha de nacimiento sea anterior o igual a 12 años antes de la fecha actual.
             'country' => ['required', 'string', 'in:España,Italia,Portugal,Inglaterra,Francia'],
-            'username' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
-            ],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
-            ],
+            'username' => ['required', 'string', 'max:50', 'unique:' . User::class],
+            'email' => ['required', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ];
     }
 
@@ -54,6 +51,9 @@ class ProfileUpdateRequest extends FormRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico no es válido.',
             'email.unique' => 'Este correo ya está en uso.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
         ];
     }
 }

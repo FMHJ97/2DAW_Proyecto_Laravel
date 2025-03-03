@@ -16,21 +16,22 @@
         <div>
             <x-input-label for="update_password_current_password" :value="__('Contraseña actual')" />
             <x-text-input id="update_password_current_password" name="current_password" type="password"
-                class="block w-full mt-1" autocomplete="current-password" />
+                class="block w-full mt-1" autocomplete="current-password"
+                placeholder="Introduzca su contraseña actual" />
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
         <div>
             <x-input-label for="update_password_password" :value="__('Nueva contraseña')" />
             <x-text-input id="update_password_password" name="password" type="password" class="block w-full mt-1"
-                autocomplete="new-password" />
+                autocomplete="new-password" placeholder="Mínimo 8 caracteres" />
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
         <div>
             <x-input-label for="update_password_password_confirmation" :value="__('Confirmar contraseña')" />
             <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password"
-                class="block w-full mt-1" autocomplete="new-password" />
+                class="block w-full mt-1" autocomplete="new-password" placeholder="Repetir la nueva contraseña" />
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 

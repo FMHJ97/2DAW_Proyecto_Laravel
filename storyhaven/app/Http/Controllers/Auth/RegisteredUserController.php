@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Http\Requests\RegisterFormRequest;
 
 class RegisteredUserController extends Controller
 {
@@ -27,17 +28,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterFormRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'date_birth' => ['required', 'date', 'before:today'], // Se añade la regla 'before:today' para que la fecha de nacimiento sea anterior a la fecha actual.
-            'country' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $request->validated(); // Se valida la petición.
 
         $user = User::create([
             'name' => $request->name,
