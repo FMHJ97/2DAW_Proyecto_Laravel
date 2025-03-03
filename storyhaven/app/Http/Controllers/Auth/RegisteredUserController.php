@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
-            'date_birth' => ['required', 'date'],
+            'date_birth' => ['required', 'date', 'before:today'], // Se añade la regla 'before:today' para que la fecha de nacimiento sea anterior a la fecha actual.
             'country' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],

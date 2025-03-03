@@ -74,9 +74,11 @@
                                 <x-primary-button>
                                     {{ __('Actualizar Relato') }}
                                 </x-primary-button>
-                                <x-secondary-button href="{{ route('relatos.index') }}">
-                                    {{ __('Cancelar') }}
-                                </x-secondary-button>
+                                <a href="{{ route('relatos.index') }}">
+                                    <x-secondary-button>
+                                        {{ __('Cancelar') }}
+                                    </x-secondary-button>
+                                </a>
                             </div>
                         </div>
 
