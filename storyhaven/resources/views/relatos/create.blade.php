@@ -151,7 +151,7 @@
                                 <div class="relative overflow-hidden bg-gray-100 rounded-lg">
                                     {{-- El iframe con el PDF --}}
                                     <iframe id="pdfPreview"
-                                        class="w-full h-[500px] border border-indigo-200 rounded-md"
+                                        class="w-full h-[640px] border border-indigo-200 rounded-md"
                                         style="display: none;" title="Vista previa del relato en formato PDF">
                                     </iframe>
 

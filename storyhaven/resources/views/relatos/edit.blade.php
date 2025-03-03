@@ -1,101 +1,238 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        <h2 class="text-xl font-bold leading-tight text-indigo-900">
             {{ __('Editar relato') }}
         </h2>
-        {{-- Mensaje de error proveniente del controlador --}}
-        @if (session('error'))
-            <div class="mt-4 text-red-500">{{ session('error') }}</div>
-        @endif
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 bg-gradient-to-br from-indigo-100 via-purple-50 to-amber-50">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden border shadow-lg bg-slate-50 border-amber-200 sm:rounded-xl">
                 <div class="p-6 text-gray-900">
+                    {{-- Mensaje de error proveniente del controlador --}}
+                    @if (session('error'))
+                        <div class="p-4 mb-6 text-sm font-medium text-red-800 rounded-lg bg-red-50" role="alert">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-red-600"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                {{ session('error') }}
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- Formulario para la modificación de un relato --}}
                     <form method="POST" action="{{ route('relatos.update', $relato) }}" enctype="multipart/form-data"
-                        class="grid grid-cols-2 gap-6">
+                        class="grid grid-cols-1 gap-8 lg:grid-cols-2">
                         @csrf
                         @method('PUT')
 
                         <!-- Columna izquierda: Campos del formulario -->
-                        <div>
+                        <div class="p-6 bg-white border border-indigo-100 rounded-lg shadow-sm">
+                            <h3 class="mb-6 text-lg font-semibold text-indigo-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-5 h-5 mr-2" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Información del relato
+                            </h3>
+
                             <!-- Título del relato -->
-                            <div>
-                                <x-input-label for="titulo" :value="__('Título del relato')" />
-                                <x-text-input id="titulo" class="block w-full mt-1" type="text" name="titulo"
-                                    :value="old('titulo', $relato->titulo)" autofocus required />
+                            <div class="mb-5">
+                                <label for="titulo" class="block mb-2 text-sm font-medium text-indigo-700">Título del
+                                    relato</label>
+                                <input type="text" id="titulo" name="titulo"
+                                    value="{{ old('titulo', $relato->titulo) }}"
+                                    class="bg-white border border-indigo-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                                    placeholder="Escribe un título atractivo" required autofocus>
                                 @error('titulo')
-                                    <span class="text-red-500">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Resumen del relato -->
-                            <div class="mt-4">
-                                <x-input-label for="resumen" :value="__('Resumen')" />
-                                <textarea id="resumen" name="resumen" rows="3"
-                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    required>{{ old('resumen', $relato->resumen) }}</textarea>
+                            <div class="mb-5">
+                                <label for="resumen"
+                                    class="block mb-2 text-sm font-medium text-indigo-700">Resumen</label>
+                                <textarea id="resumen" name="resumen" rows="4"
+                                    class="bg-white border border-indigo-300 text-gray-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                                    placeholder="Escribe un breve resumen de tu historia" required>{{ old('resumen', $relato->resumen) }}</textarea>
                                 @error('resumen')
-                                    <span class="text-red-500">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Géneros del relato -->
-                            <div class="mt-4">
-                                <x-input-label :value="__('Selecciona los géneros')" />
-                                <div class="flex flex-wrap">
+                            <div class="mb-5">
+                                <label class="block mb-3 text-sm font-medium text-indigo-700">Selecciona los géneros
+                                    (máx. 4)</label>
+                                <div class="grid grid-cols-2 gap-2 md:grid-cols-3">
                                     @foreach ($generos as $genero)
-                                        <label class="mr-4">
-                                            <input type="checkbox" name="generos[]" value="{{ $genero->id }}"
-                                                {{-- Si el género está en la lista de géneros del relato, marcarlo --}}
-                                                {{ in_array($genero->id, old('generos', $relato->generos->pluck('id')->toArray())) ? 'checked' : '' }}>
-                                            {{ $genero->nombre }}
-                                        </label>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="genero-{{ $genero->id }}" name="generos[]"
+                                                value="{{ $genero->id }}"
+                                                {{ in_array($genero->id, old('generos', $relato->generos->pluck('id')->toArray())) ? 'checked' : '' }}
+                                                class="w-4 h-4 text-indigo-600 border-indigo-300 rounded focus:ring-indigo-500">
+                                            <label for="genero-{{ $genero->id }}" class="ml-2 text-sm text-gray-700">
+                                                {{ $genero->nombre }}
+                                            </label>
+                                        </div>
                                     @endforeach
                                 </div>
                                 @error('generos')
-                                    <span class="text-red-500">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Subida de PDF -->
-                            <div class="mt-4">
-                                <x-input-label for="contenido_pdf" :value="__('Subir PDF')" />
-                                <input id="contenido_pdf" class="block w-full mt-1 border" type="file"
-                                    name="contenido_pdf" accept="application/pdf" onchange="previewPDF(event)" />
+                            <div class="mb-5">
+                                <label for="contenido_pdf"
+                                    class="block mb-2 text-sm font-medium text-indigo-700">Actualizar PDF
+                                    (opcional)</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="contenido_pdf"
+                                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-indigo-300 border-dashed rounded-lg cursor-pointer bg-indigo-50 hover:bg-indigo-100">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-10 h-10 mb-3 text-indigo-500" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                            </svg>
+                                            <p class="mb-2 text-sm text-indigo-700"><span class="font-semibold">Haz clic
+                                                    para actualizar</span> o arrastra y suelta</p>
+                                            <p class="text-xs text-gray-500">PDF (MAX. 10MB)</p>
+                                        </div>
+                                        <input id="contenido_pdf" type="file" name="contenido_pdf"
+                                            accept="application/pdf" class="hidden" onchange="previewPDF(event)" />
+                                    </label>
+                                </div>
+                                <div id="file-selected"
+                                    class="hidden p-2 mt-3 text-sm text-indigo-700 rounded-lg bg-indigo-50"></div>
+                                <p class="mt-2 text-xs text-gray-500">Deja este campo vacío si no deseas cambiar el PDF
+                                    actual.</p>
                                 @error('contenido_pdf')
-                                    <span class="text-red-500">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="flex items-center justify-start gap-2 mt-4">
-                                <x-primary-button>
-                                    {{ __('Actualizar Relato') }}
-                                </x-primary-button>
-                                <a href="{{ route('relatos.index') }}">
-                                    <x-secondary-button>
-                                        {{ __('Cancelar') }}
-                                    </x-secondary-button>
+                            <div class="flex items-center justify-start mt-8">
+                                <button type="submit"
+                                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Actualizar relato
+                                </button>
+
+                                <a href="{{ route('relatos.index') }}"
+                                    class="inline-flex items-center px-5 py-2.5 ml-4 text-sm font-medium text-indigo-700 bg-white border border-indigo-300 rounded-lg hover:bg-indigo-50 focus:ring-4 focus:ring-indigo-300">
+                                    Cancelar
                                 </a>
                             </div>
                         </div>
 
                         <!-- Columna derecha: Previsualización del PDF -->
-                        <div class="p-4 bg-gray-100 border rounded-lg ">
-                            <p class="text-lg font-semibold text-gray-700">Vista previa del PDF</p>
-                            <!-- Verificar si ya existe un archivo PDF y previsualizarlo -->
-                            @if ($relato->contenido_pdf)
-                                <iframe id="pdfPreview" class="w-full h-[500px] mt-2 border rounded-lg"
-                                    src="{{ asset('storage/relatos/' . $relato->contenido_pdf) }}"></iframe>
-                                <p id="noFileText" class="mt-2 text-gray-500" style="display: none;">No se ha
-                                    seleccionado ningún archivo.</p>
-                            @else
-                                <iframe id="pdfPreview" class="w-full h-[500px] mt-2 border rounded-lg"
-                                    style="display: none;"></iframe>
-                                <p id="noFileText" class="mt-2 text-gray-500">No se ha seleccionado ningún archivo.</p>
-                            @endif
+                        <div class="overflow-hidden bg-white border border-indigo-100 rounded-lg shadow-sm">
+                            <div class="p-4 border-b border-indigo-100 bg-indigo-50">
+                                <h3 class="text-lg font-semibold text-indigo-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-5 h-5 mr-2"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Vista previa del PDF
+                                </h3>
+                            </div>
+
+                            <div class="p-4">
+                                <div class="relative overflow-hidden bg-gray-100 rounded-lg">
+                                    {{-- El iframe con el PDF --}}
+                                    @if ($relato->contenido_pdf)
+                                        <iframe id="pdfPreview"
+                                            class="w-full h-[640px] border border-indigo-200 rounded-md"
+                                            src="{{ asset('storage/relatos/' . $relato->contenido_pdf) }}#toolbar=0"
+                                            title="Vista previa del relato en formato PDF">
+                                        </iframe>
+
+                                        {{-- Estado cuando hay un PDF existente --}}
+                                        <div id="noFileContainer"
+                                            class="flex flex-col items-center justify-center h-[500px] bg-indigo-50 border border-indigo-200 rounded-md"
+                                            style="display: none;">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-16 h-16 mb-4 text-indigo-300" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            <p id="noFileText" class="text-lg font-medium text-indigo-700">No se ha
+                                                seleccionado ningún archivo</p>
+                                            <p class="max-w-md mt-2 text-sm text-center text-gray-500">Sube un archivo
+                                                PDF para ver una vista previa aquí</p>
+                                        </div>
+                                    @else
+                                        <iframe id="pdfPreview"
+                                            class="w-full h-[500px] border border-indigo-200 rounded-md"
+                                            style="display: none;" title="Vista previa del relato en formato PDF">
+                                        </iframe>
+
+                                        {{-- Estado cuando no hay PDF existente --}}
+                                        <div id="noFileContainer"
+                                            class="flex flex-col items-center justify-center h-[500px] bg-indigo-50 border border-indigo-200 rounded-md">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-16 h-16 mb-4 text-indigo-300" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            <p id="noFileText" class="text-lg font-medium text-indigo-700">No hay
+                                                archivo PDF asociado</p>
+                                            <p class="max-w-md mt-2 text-sm text-center text-gray-500">Sube un archivo
+                                                PDF para ver una vista previa aquí</p>
+                                        </div>
+                                    @endif
+
+                                    {{-- Overlay cuando se selecciona un archivo nuevo --}}
+                                    <div id="pdfOverlay"
+                                        class="absolute inset-0 flex flex-col items-center justify-center bg-indigo-900 bg-opacity-20"
+                                        style="display: none;">
+                                        <div class="max-w-md p-4 text-center bg-white rounded-lg shadow-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-12 h-12 mx-auto mb-3 text-indigo-500" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            <h5 class="mb-2 text-lg font-bold text-indigo-800">PDF seleccionado</h5>
+                                            <p class="mb-4 text-sm text-gray-600">Este PDF reemplazará al actual cuando
+                                                guardes los cambios.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center px-3 py-2 mt-3 text-sm text-indigo-700 rounded-lg bg-indigo-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-5 h-5 mr-2"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>
+                                        @if ($relato->contenido_pdf)
+                                            Archivo actual: <span
+                                                class="font-medium">{{ $relato->contenido_pdf }}</span>
+                                        @else
+                                            No hay ningún archivo PDF cargado para este relato.
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </form>
 
@@ -104,19 +241,42 @@
                         function previewPDF(event) {
                             const file = event.target.files[0]; // Archivo seleccionado.
                             const pdfPreview = document.getElementById('pdfPreview'); // Iframe de previsualización.
-                            const noFileText = document.getElementById('noFileText'); // Mensaje de error.
+                            const noFileContainer = document.getElementById('noFileContainer'); // Contenedor mensaje inicial
+                            const pdfOverlay = document.getElementById('pdfOverlay'); // Overlay con mensaje
+                            const fileSelected = document.getElementById('file-selected'); // Texto archivo seleccionado
 
                             if (file && file.type === "application/pdf") {
-                                // Crear una URL para el archivo seleccionado
-                                // y mostrarlo en el iframe.
+                                // Crear una URL para el archivo seleccionado y mostrarlo en el iframe.
                                 const fileURL = URL.createObjectURL(file);
-                                // Mostrar el iframe y ocultar el mensaje de error.
+
+                                // Actualizar el iframe
                                 pdfPreview.src = fileURL;
                                 pdfPreview.style.display = "block";
-                                noFileText.style.display = "none";
+
+                                // Mostrar overlay y ocultar mensaje "no hay archivo"
+                                pdfOverlay.style.display = "flex";
+                                noFileContainer.style.display = "none";
+
+                                // Mostrar nombre del archivo seleccionado
+                                fileSelected.textContent = `Archivo seleccionado: ${file.name}`;
+                                fileSelected.classList.remove('hidden');
                             } else {
-                                pdfPreview.style.display = "none";
-                                noFileText.style.display = "block";
+                                // Si no es un PDF o no hay archivo
+                                if (pdfPreview.getAttribute('src') && pdfPreview.getAttribute('src').includes('storage/relatos/')) {
+                                    // Si hay un PDF existente, mantenerlo visible
+                                    pdfOverlay.style.display = "none";
+                                } else {
+                                    // Si no hay PDF existente, mostrar el estado "no hay archivo"
+                                    pdfPreview.style.display = "none";
+                                    noFileContainer.style.display = "flex";
+                                }
+
+                                fileSelected.classList.add('hidden');
+
+                                if (file) {
+                                    // Si se seleccionó un archivo que no es PDF
+                                    document.getElementById('noFileText').textContent = "El archivo seleccionado no es un PDF";
+                                }
                             }
                         }
                     </script>
