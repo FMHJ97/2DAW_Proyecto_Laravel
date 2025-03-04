@@ -83,9 +83,18 @@ class RelatoList extends Component
         if ($relato) {
             // Eliminamos el relato.
             $relato->delete();
-            // Mensaje de éxito.
-            session()->flash('message', 'Relato eliminado correctamente.');
+            // Redireccionamos a la página de relatos.
+            return redirect()->route('admin.relatos')->with('alert', [
+                'type' => 'success',
+                'message' => 'Relato eliminado correctamente.'
+            ]);
         }
+
+        // Si no se encuentra el relato, redireccionamos a la página de relatos.
+        return redirect()->route('admin.relatos')->with('alert', [
+            'type' => 'error',
+            'message' => 'No se ha podido eliminar el relato.'
+        ]);
     }
 
     public function restoreRelato($id)
@@ -96,7 +105,18 @@ class RelatoList extends Component
         if ($relato) {
             // Restauramos el relato.
             $relato->restore();
+            // Redireccionamos a la página de relatos.
+            return redirect()->route('admin.relatos')->with('alert', [
+                'type' => 'success',
+                'message' => 'Relato restaurado correctamente.'
+            ]);
         }
+
+        // Si no se encuentra el relato, redireccionamos a la página de relatos.
+        return redirect()->route('admin.relatos')->with('alert', [
+            'type' => 'error',
+            'message' => 'No se ha podido restaurar el relato.'
+        ]);
     }
 
     public function updatingSearch()
