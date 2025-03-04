@@ -19,7 +19,10 @@ class IsAdmin
         // Comprobamos si el usuario autenticado es administrador.
         if (Auth::user()->role !== 'admin') {
             // Si no es administrador, redirigimos a la página de inicio con un mensaje de error.
-            return redirect()->route('inicio');
+            return redirect()->route('inicio')->with('alert', [
+                'type' => 'error',
+                'message' => 'No tienes permisos para acceder a esta página.'
+            ]);
         }
 
         return $next($request);

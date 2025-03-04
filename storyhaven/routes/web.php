@@ -37,15 +37,15 @@ Route::middleware('auth')->group(function () {
  */
 Route::middleware('auth')->group(function () {
     // Ruta para obtener los relatos del usuario autenticado.
-    Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index');
+    Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index')->middleware('isUser');
     // Ruta para almacenar un nuevo relato.
-    Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store')->middleware('isUser');
+    Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store')->middleware('verified', 'isUser');
     // Ruta para crear un nuevo relato.
     Route::get('/relatos/create', [RelatoController::class, 'create'])->name('relatos.create')->middleware('verified', 'isUser');
     // Ruta para obtener un relato en específico.
     Route::get('/relatos/{relato}', [RelatoController::class, 'show'])->name('relatos.show');
     // Ruta para descargar un relato.
-    Route::get('/relatos/{relato}/descargar', [RelatoController::class, 'download'])->name('relatos.download');
+    Route::get('/relatos/{relato}/descargar', [RelatoController::class, 'download'])->name('relatos.download')->middleware('verified', 'isUser');
 
     /**
      * Rutas para editar, actualizar y eliminar un relato.
