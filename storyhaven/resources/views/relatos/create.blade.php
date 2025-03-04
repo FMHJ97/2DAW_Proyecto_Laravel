@@ -9,20 +9,6 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden border shadow-lg bg-slate-50 border-amber-200 sm:rounded-xl">
                 <div class="p-6 text-gray-900">
-                    {{-- Mensaje de error proveniente del controlador --}}
-                    @if (session('error'))
-                        <div class="p-4 mb-6 text-sm font-medium text-red-800 rounded-lg bg-red-50" role="alert">
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-red-600"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                {{ session('error') }}
-                            </div>
-                        </div>
-                    @endif
 
                     {{-- Formulario para la creación de un nuevo relato --}}
                     <form method="POST" action="{{ route('relatos.store') }}" enctype="multipart/form-data"

@@ -85,10 +85,16 @@ class RelatoController extends Controller
             }
 
             // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
-            return to_route('relatos.index');
+            return to_route('relatos.index')->with('alert', [
+                'type' => 'success',
+                'message' => 'Relato creado correctamente.'
+            ]);
         } catch (QueryException $e) {
             // Retornamos a la vista anterior con un mensaje de error.
-            return back();
+            return back()->with('alert', [
+                'type' => 'error',
+                'message' => 'Error al crear el relato.'
+            ]);
         }
     }
 
@@ -156,10 +162,16 @@ class RelatoController extends Controller
             }
 
             // Redirigimos a la vista detallada del relato con un mensaje de éxito.
-            return to_route('relatos.show', $relato);
+            return to_route('relatos.show', $relato)->with('alert', [
+                'type' => 'success',
+                'message' => 'Relato actualizado correctamente.'
+            ]);
         } catch (QueryException $e) {
             // Retornamos a la vista anterior con un mensaje de error.
-            return back();
+            return back()->with('alert', [
+                'type' => 'error',
+                'message' => 'Error al actualizar el relato.'
+            ]);
         }
 
     }
@@ -174,7 +186,10 @@ class RelatoController extends Controller
         // Borramos el archivo PDF del almacenamiento (no lo borramos si queremos conservarlo -> Soft Delete).
         // Storage::disk('public')->delete('relatos/' . $relato->contenido_pdf);
         // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
-        return to_route('relatos.index');
+        return to_route('relatos.index')->with('alert', [
+            'type' => 'success',
+            'message' => 'Relato eliminado correctamente.'
+        ]);
     }
 
     /**
@@ -192,7 +207,10 @@ class RelatoController extends Controller
         }
 
         // Si el archivo no existe, redirigimos con un mensaje de error
-        return back();
+        return back()->with('alert', [
+            'type' => 'error',
+            'message' => 'Error al descargar el relato.'
+        ]);
     }
 
 }

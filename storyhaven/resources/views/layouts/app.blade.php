@@ -42,8 +42,17 @@
         <!-- Page Heading -->
         @isset($header)
             <header class="bg-white shadow">
-                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    {{ $header }}
+                <div class="flex items-center justify-between px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div class="flex-grow">
+                        {{ $header }}
+                    </div>
+
+                    <!-- Alerts -->
+                    @if (session('alert'))
+                        <div class="flex-shrink-0 ml-4">
+                            <x-alert :type="session('alert.type')" :message="session('alert.message')" />
+                        </div>
+                    @endif
                 </div>
             </header>
         @endisset
