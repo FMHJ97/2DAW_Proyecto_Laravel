@@ -148,7 +148,7 @@
                             </div>
 
                             <div class="p-4">
-                                <div class="relative overflow-hidden bg-gray-100 rounded-lg">
+                                <div class="relative overflow-hidden rounded-lg">
                                     {{-- El iframe con el PDF --}}
                                     <iframe id="pdfPreview"
                                         class="w-full h-[640px] border border-indigo-200 rounded-md"
@@ -168,30 +168,7 @@
                                         <p class="max-w-md mt-2 text-sm text-center text-gray-500">Sube un archivo PDF
                                             para ver una vista previa aquí</p>
                                     </div>
-
-                                    {{-- Overlay cuando se selecciona un archivo --}}
-                                    <div id="pdfOverlay"
-                                        class="absolute inset-0 flex flex-col items-center justify-center bg-indigo-900 bg-opacity-20"
-                                        style="display: none;">
-                                        <div class="max-w-md p-4 text-center bg-white rounded-lg shadow-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-12 h-12 mx-auto mb-3 text-indigo-500" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                            </svg>
-                                            <h5 class="mb-2 text-lg font-bold text-indigo-800">Vista previa limitada
-                                            </h5>
-                                            <p class="mb-4 text-sm text-gray-600">Esta es una vista previa limitada. El
-                                                PDF se publicará cuando guardes el relato.</p>
-                                        </div>
-                                    </div>
                                 </div>
-
-                                <p class="mt-3 text-xs italic text-center text-gray-500">
-                                    La vista previa del PDF es solo referencial. Su visualización final puede variar
-                                    ligeramente.
-                                </p>
                             </div>
                         </div>
                     </form>
@@ -202,7 +179,6 @@
                             const file = event.target.files[0]; // Archivo seleccionado.
                             const pdfPreview = document.getElementById('pdfPreview'); // Iframe de previsualización.
                             const noFileContainer = document.getElementById('noFileContainer'); // Contenedor mensaje inicial
-                            const pdfOverlay = document.getElementById('pdfOverlay'); // Overlay con mensaje
                             const fileSelected = document.getElementById('file-selected'); // Texto archivo seleccionado
 
                             if (file && file.type === "application/pdf") {
@@ -210,11 +186,10 @@
                                 const fileURL = URL.createObjectURL(file);
 
                                 // Actualizar el iframe
-                                pdfPreview.src = fileURL;
+                                pdfPreview.src = fileURL + "#toolbar=0";
                                 pdfPreview.style.display = "block";
 
-                                // Mostrar overlay y ocultar mensaje "no hay archivo"
-                                pdfOverlay.style.display = "flex";
+                                // Ocultar mensaje "no hay archivo"
                                 noFileContainer.style.display = "none";
 
                                 // Mostrar nombre del archivo seleccionado
@@ -223,7 +198,6 @@
                             } else {
                                 // Si no es un PDF o no hay archivo
                                 pdfPreview.style.display = "none";
-                                pdfOverlay.style.display = "none";
                                 noFileContainer.style.display = "flex";
                                 fileSelected.classList.add('hidden');
 
