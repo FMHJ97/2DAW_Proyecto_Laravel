@@ -85,10 +85,10 @@ class RelatoController extends Controller
             }
 
             // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
-            return to_route('relatos.index')->with('success', 'Relato guardado correctamente.');
+            return to_route('relatos.index');
         } catch (QueryException $e) {
             // Retornamos a la vista anterior con un mensaje de error.
-            return back()->with('error', 'Error al guardar el relato.');
+            return back();
         }
     }
 
@@ -156,10 +156,10 @@ class RelatoController extends Controller
             }
 
             // Redirigimos a la vista detallada del relato con un mensaje de éxito.
-            return to_route('relatos.show', $relato)->with('success', 'Relato actualizado correctamente.');
+            return to_route('relatos.show', $relato);
         } catch (QueryException $e) {
             // Retornamos a la vista anterior con un mensaje de error.
-            return back()->with('error', 'Error al guardar el relato.');
+            return back();
         }
 
     }
@@ -174,7 +174,7 @@ class RelatoController extends Controller
         // Borramos el archivo PDF del almacenamiento (no lo borramos si queremos conservarlo -> Soft Delete).
         // Storage::disk('public')->delete('relatos/' . $relato->contenido_pdf);
         // Redirigimos a la vista 'relatos.index' con un mensaje de éxito.
-        return to_route('relatos.index')->with('success', 'Relato eliminado correctamente.');
+        return to_route('relatos.index');
     }
 
     /**
@@ -192,7 +192,7 @@ class RelatoController extends Controller
         }
 
         // Si el archivo no existe, redirigimos con un mensaje de error
-        return back()->with('error', 'El archivo no se encuentra disponible.');
+        return back();
     }
 
 }

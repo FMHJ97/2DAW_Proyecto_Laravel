@@ -19,7 +19,7 @@ class IsUser
         // Comprobamos si el usuario autenticado es un usuario normal.
         if (Auth::user()->role !== 'user') {
             // Si no es un usuario normal, redirigimos a la página de inicio con un mensaje de error.
-            return redirect()->route('inicio')->with('error', 'No tienes permisos para acceder a esta página.');
+            return redirect()->route('inicio');
         }
         // Si es un usuario normal, continuamos con la petición.
         return $next($request);

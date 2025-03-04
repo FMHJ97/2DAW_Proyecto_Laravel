@@ -20,7 +20,7 @@ class RelatoFactory extends Factory
             'user_id' => fake()->numberBetween(1, 10),
             'titulo' => fake()->sentence(6),
             'resumen' => fake()->paragraph(3),
-            'contenido_pdf' => fake()->url(),
+            'contenido_pdf' => null,
             'fecha_publicacion' => fake()->dateTime(),
         ];
     }

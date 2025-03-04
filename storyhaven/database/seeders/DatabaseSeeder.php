@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Bélico'],
         ]);
 
-        Relato::factory(10)->create();
+        // Relato::factory(10)->create();
 
     }
 }
