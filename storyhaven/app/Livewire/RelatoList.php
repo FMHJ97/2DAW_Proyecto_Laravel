@@ -15,6 +15,32 @@ class RelatoList extends Component
     public $typeSearch = 'titulo'; // Variable para el tipo de búsqueda.
     public $includeDeleted = false; // Variable para incluir relatos eliminados.
 
+    // Propiedades para el modal de confirmación
+    public $showDeleteModal = false;
+    public $relatoIdToDelete = null;
+    public $relatoToDelete = null;
+
+    // Método para mostrar el modal de confirmación
+    public function confirmRelatoDeletion($relatoId)
+    {
+        $this->relatoIdToDelete = $relatoId;
+        $this->relatoToDelete = Relato::find($relatoId);
+        $this->showDeleteModal = true;
+    }
+
+    // Método para cerrar el modal sin eliminar
+    public function cancelRelatoDeletion()
+    {
+        $this->reset(['showDeleteModal', 'relatoIdToDelete', 'relatoToDelete']);
+    }
+
+    // Método para confirmar la eliminación
+    public function deleteConfirmed()
+    {
+        $this->deleteRelato($this->relatoIdToDelete);
+        $this->reset(['showDeleteModal', 'relatoIdToDelete', 'relatoToDelete']);
+    }
+
     public function render()
     {
         $query = Relato::query(); // Consulta a la tabla relatos.
@@ -57,6 +83,8 @@ class RelatoList extends Component
         if ($relato) {
             // Eliminamos el relato.
             $relato->delete();
+            // Mensaje de éxito.
+            session()->flash('message', 'Relato eliminado correctamente.');
         }
     }
 

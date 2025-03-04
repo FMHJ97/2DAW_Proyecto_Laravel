@@ -14,12 +14,38 @@ class UserList extends Component
     public $search = '';
     public $typeSearch = 'username';
 
+    // Propiedades para el modal de confirmación
+    public $showDeleteModal = false;
+    public $userIdToDelete = null;
+    public $userToDelete = null;
+
     /*
     Permite la paginación de los registros de la tabla users.
     WithoutUrlPagination: Permite que la paginación no se vea reflejada
     en la URL.
     */
     use WithPagination, WithoutUrlPagination;
+
+    // Método para mostrar el modal de confirmación
+    public function confirmUserDeletion($userId)
+    {
+        $this->userIdToDelete = $userId;
+        $this->userToDelete = User::find($userId);
+        $this->showDeleteModal = true;
+    }
+
+    // Método para cerrar el modal sin eliminar
+    public function cancelUserDeletion()
+    {
+        $this->reset(['showDeleteModal', 'userIdToDelete', 'userToDelete']);
+    }
+
+    // Método para confirmar la eliminación
+    public function deleteConfirmed()
+    {
+        $this->deleteUser($this->userIdToDelete);
+        $this->reset(['showDeleteModal', 'userIdToDelete', 'userToDelete']);
+    }
 
     public function render()
     {
@@ -43,6 +69,8 @@ class UserList extends Component
         if ($user) {
             // Eliminamos el usuario.
             $user->delete();
+            // Mensaje de éxito.
+            session()->flash('message', 'Usuario eliminado correctamente.');
         }
     }
 

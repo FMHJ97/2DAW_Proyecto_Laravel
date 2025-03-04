@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
  */
 Route::middleware('auth')->group(function () {
     // Ruta para obtener los relatos del usuario autenticado.
-    Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index')->middleware('isUser');
+    Route::get('/relatos', [RelatoController::class, 'index'])->name('relatos.index');
     // Ruta para almacenar un nuevo relato.
     Route::post('/relatos', [RelatoController::class, 'store'])->name('relatos.store')->middleware('isUser');
     // Ruta para crear un nuevo relato.
