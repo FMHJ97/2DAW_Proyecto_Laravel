@@ -55,7 +55,6 @@ class DatabaseSeeder extends Seeder
             ['nombre' => 'Sobrenatural'],
             ['nombre' => 'Psicológico'],
             ['nombre' => 'Distopía'],
-            ['nombre' => 'Post-apocalíptico'],
             ['nombre' => 'Bélico'],
         ]);
 

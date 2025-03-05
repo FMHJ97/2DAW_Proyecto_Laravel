@@ -90,31 +90,43 @@
 
                             <!-- Subida de PDF -->
                             <div class="mb-5">
-                                <label for="contenido_pdf"
-                                    class="block mb-2 text-sm font-medium text-indigo-700">Actualizar PDF
-                                    (opcional)</label>
-                                <div class="flex items-center justify-center w-full">
-                                    <label for="contenido_pdf"
-                                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-indigo-300 border-dashed rounded-lg cursor-pointer bg-indigo-50 hover:bg-indigo-100">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-10 h-10 mb-3 text-indigo-500" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                            </svg>
-                                            <p class="mb-2 text-sm text-indigo-700"><span class="font-semibold">Haz clic
-                                                    para actualizar</span> o arrastra y suelta</p>
-                                            <p class="text-xs text-gray-500">PDF (MAX. 10MB)</p>
-                                        </div>
-                                        <input id="contenido_pdf" type="file" name="contenido_pdf"
-                                            accept="application/pdf" class="hidden" onchange="previewPDF(event)" />
-                                    </label>
+                                <label for="contenido_pdf" class="block mb-2 text-sm font-medium text-indigo-700">
+                                    Actualizar PDF (opcional)
+                                </label>
+                                <div class="flex flex-col space-y-2">
+                                    <!-- Input file estilizado -->
+                                    <input type="file" id="contenido_pdf" name="contenido_pdf"
+                                        accept="application/pdf"
+                                        class="block w-full pl-3 text-sm text-gray-700 bg-white border border-indigo-300 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 file:mr-4 file:py-2 file:px-5 file:border-0 file:text-white file:bg-indigo-600 file:hover:bg-indigo-700 file:transition file:cursor-pointer"
+                                        onchange="previewPDF(event)" />
+
+                                    <!-- Mensaje de estado del archivo -->
+                                    <div id="file-selected"
+                                        class="hidden p-2 text-sm text-indigo-700 rounded-lg bg-indigo-50">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-4 h-4 mr-1"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span></span>
+                                    </div>
+
+                                    <!-- Mensaje de error -->
+                                    <div id="file-error" class="hidden p-2 text-sm text-red-700 rounded-lg bg-red-50">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-4 h-4 mr-1"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        El archivo seleccionado no es un PDF válido
+                                    </div>
+
+                                    <!-- Indicaciones -->
+                                    <p class="text-xs text-gray-500">
+                                        Formatos aceptados: PDF. Tamaño máximo: 10MB.
+                                    </p>
                                 </div>
-                                <div id="file-selected"
-                                    class="hidden p-2 mt-3 text-sm text-indigo-700 rounded-lg bg-indigo-50"></div>
-                                <p class="mt-2 text-xs text-gray-500">Deja este campo vacío si no deseas cambiar el PDF
-                                    actual.</p>
+
                                 @error('contenido_pdf')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -152,67 +164,30 @@
                             </div>
 
                             <div class="p-4">
-                                <div class="relative overflow-hidden bg-gray-100 rounded-lg">
+                                <div class="relative overflow-hidden rounded-lg">
                                     {{-- El iframe con el PDF --}}
-                                    @if ($relato->contenido_pdf)
-                                        <iframe id="pdfPreview"
-                                            class="w-full h-[640px] border border-indigo-200 rounded-md"
-                                            src="{{ asset('storage/relatos/' . $relato->contenido_pdf) }}#toolbar=0"
-                                            title="Vista previa del relato en formato PDF">
-                                        </iframe>
+                                    <iframe id="pdfPreview"
+                                        class="w-full h-[640px] border border-indigo-200 rounded-md"
+                                        src="{{ $relato->contenido_pdf ? asset('storage/relatos/' . $relato->contenido_pdf) . '#toolbar=0' : '' }}"
+                                        style="{{ $relato->contenido_pdf ? '' : 'display: none;' }}"
+                                        title="Vista previa del relato en formato PDF">
+                                    </iframe>
 
-                                        {{-- Estado cuando hay un PDF existente --}}
-                                        <div id="noFileContainer"
-                                            class="flex flex-col items-center justify-center h-[500px] bg-indigo-50 border border-indigo-200 rounded-md"
-                                            style="display: none;">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-16 h-16 mb-4 text-indigo-300" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                            <p id="noFileText" class="text-lg font-medium text-indigo-700">No se ha
-                                                seleccionado ningún archivo</p>
-                                            <p class="max-w-md mt-2 text-sm text-center text-gray-500">Sube un archivo
-                                                PDF para ver una vista previa aquí</p>
-                                        </div>
-                                    @else
-                                        <iframe id="pdfPreview"
-                                            class="w-full h-[500px] border border-indigo-200 rounded-md"
-                                            style="display: none;" title="Vista previa del relato en formato PDF">
-                                        </iframe>
-
-                                        {{-- Estado cuando no hay PDF existente --}}
-                                        <div id="noFileContainer"
-                                            class="flex flex-col items-center justify-center h-[500px] bg-indigo-50 border border-indigo-200 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-16 h-16 mb-4 text-indigo-300" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                            <p id="noFileText" class="text-lg font-medium text-indigo-700">No hay
-                                                archivo PDF asociado</p>
-                                            <p class="max-w-md mt-2 text-sm text-center text-gray-500">Sube un archivo
-                                                PDF para ver una vista previa aquí</p>
-                                        </div>
-                                    @endif
-
-                                    {{-- Overlay cuando se selecciona un archivo nuevo --}}
-                                    <div id="pdfOverlay"
-                                        class="absolute inset-0 flex flex-col items-center justify-center bg-indigo-900 bg-opacity-20"
-                                        style="display: none;">
-                                        <div class="max-w-md p-4 text-center bg-white rounded-lg shadow-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-12 h-12 mx-auto mb-3 text-indigo-500" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                            </svg>
-                                            <h5 class="mb-2 text-lg font-bold text-indigo-800">PDF seleccionado</h5>
-                                            <p class="mb-4 text-sm text-gray-600">Este PDF reemplazará al actual cuando
-                                                guardes los cambios.</p>
-                                        </div>
+                                    {{-- Estado cuando no hay PDF o se muestra mensaje --}}
+                                    <div id="noFileContainer"
+                                        class="flex flex-col items-center justify-center h-[500px] bg-indigo-50 border border-indigo-200 rounded-md"
+                                        style="{{ $relato->contenido_pdf ? 'display: none;' : '' }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 text-indigo-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <p id="noFileText" class="text-lg font-medium text-indigo-700">
+                                            {{ $relato->contenido_pdf ? 'No se ha seleccionado ningún archivo' : 'No hay archivo PDF asociado' }}
+                                        </p>
+                                        <p class="max-w-md mt-2 text-sm text-center text-gray-500">
+                                            Sube un archivo PDF para ver una vista previa aquí
+                                        </p>
                                     </div>
                                 </div>
 
@@ -242,40 +217,59 @@
                             const file = event.target.files[0]; // Archivo seleccionado.
                             const pdfPreview = document.getElementById('pdfPreview'); // Iframe de previsualización.
                             const noFileContainer = document.getElementById('noFileContainer'); // Contenedor mensaje inicial
-                            const pdfOverlay = document.getElementById('pdfOverlay'); // Overlay con mensaje
                             const fileSelected = document.getElementById('file-selected'); // Texto archivo seleccionado
+                            const fileError = document.getElementById('file-error'); // Mensaje de error
 
-                            if (file && file.type === "application/pdf") {
-                                // Crear una URL para el archivo seleccionado y mostrarlo en el iframe.
-                                const fileURL = URL.createObjectURL(file);
+                            // Ocultar mensaje de error por defecto
+                            fileError.classList.add('hidden');
 
-                                // Actualizar el iframe
-                                pdfPreview.src = fileURL;
-                                pdfPreview.style.display = "block";
+                            if (file) {
+                                if (file.type === "application/pdf") {
+                                    // Es un archivo PDF válido
+                                    const fileURL = URL.createObjectURL(file);
 
-                                // Mostrar overlay y ocultar mensaje "no hay archivo"
-                                pdfOverlay.style.display = "flex";
-                                noFileContainer.style.display = "none";
+                                    // Actualizar iframe y visualización
+                                    pdfPreview.src = fileURL + "#toolbar=0";
+                                    pdfPreview.style.display = "block";
+                                    noFileContainer.style.display = "none";
 
-                                // Mostrar nombre del archivo seleccionado
-                                fileSelected.textContent = `Archivo seleccionado: ${file.name}`;
-                                fileSelected.classList.remove('hidden');
-                            } else {
-                                // Si no es un PDF o no hay archivo
-                                if (pdfPreview.getAttribute('src') && pdfPreview.getAttribute('src').includes('storage/relatos/')) {
+                                    // Mostrar mensaje de confirmación
+                                    fileSelected.querySelector('span').textContent = `Archivo seleccionado: ${file.name}`;
+                                    fileSelected.classList.remove('hidden');
+
+                                    // Validar tamaño (opcional - puedes ajustar el límite)
+                                    if (file.size > 10 * 1024 * 1024) { // 10MB
+                                        fileError.textContent = "El archivo excede el tamaño máximo permitido (10MB)";
+                                        fileError.classList.remove('hidden');
+                                    }
+                                } else {
+                                    // No es un archivo PDF
+                                    fileError.classList.remove('hidden');
+                                    fileSelected.classList.add('hidden');
+
                                     // Si hay un PDF existente, mantenerlo visible
-                                    pdfOverlay.style.display = "none";
+                                    if (pdfPreview.getAttribute('src') && pdfPreview.getAttribute('src').includes('storage/relatos/')) {
+                                        // No hacer nada, mantener el PDF existente
+                                    } else {
+                                        // Si no hay PDF existente, mostrar el estado "no hay archivo"
+                                        pdfPreview.style.display = "none";
+                                        noFileContainer.style.display = "flex";
+                                        document.getElementById('noFileText').textContent = "El archivo seleccionado no es un PDF";
+                                    }
+                                }
+                            } else {
+                                // Se canceló la selección, volver al estado anterior
+                                fileSelected.classList.add('hidden');
+
+                                // Si hay un PDF existente, mantenerlo visible
+                                if (pdfPreview.getAttribute('src') && pdfPreview.getAttribute('src').includes('storage/relatos/')) {
+                                    noFileContainer.style.display = "none";
+                                    pdfPreview.style.display = "block";
                                 } else {
                                     // Si no hay PDF existente, mostrar el estado "no hay archivo"
                                     pdfPreview.style.display = "none";
                                     noFileContainer.style.display = "flex";
-                                }
-
-                                fileSelected.classList.add('hidden');
-
-                                if (file) {
-                                    // Si se seleccionó un archivo que no es PDF
-                                    document.getElementById('noFileText').textContent = "El archivo seleccionado no es un PDF";
+                                    document.getElementById('noFileText').textContent = "No hay archivo PDF asociado";
                                 }
                             }
                         }
